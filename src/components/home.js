@@ -5,10 +5,11 @@ import pagoda from '../assets/pagoda.mp4';
 import api from '../assets/api.mp4';
 import bomberman from '../assets/bomberman.mp4';
 import crypt from '../assets/crypt.mp4';
+import test from '../assets/test.mp4';
 
 
 function RegisterPage() {
-  const videoList = [bomberman, api, pagoda, crypt];
+  const videoList = [bomberman, api, pagoda, crypt, test];
   const [leftClicked, setLeftClicked] = useState(false);
   const [rightClicked, setRightClicked] = useState(false);
   const [loadArrowButtons, setLoadArrowButtons] = useState(false);
@@ -22,84 +23,90 @@ function RegisterPage() {
   const [videoPaused, setVideoPaused] = useState(true);
   const [page, setPage] = useState(1);
   const [endReached, setEndReached] = useState(false);
+  const [zIndex, setZIndex] = useState({ current: 3, next: 2, prev: 1 })
 
 
   setTimeout(() => setLoadArrowButtons(true), 1000)
 
   const handleLeftClick = () => {
-    if (isSliding) return
+    //if (isSliding) return
+    const previousVideo = page - 3
     setIsSliding(true)
     setLeftClicked(true);
     setPage((prevPage) => prevPage - 1);
     setTimeout(() => setLeftClicked(false), 180)
 
-    if (page % 2 !== 0) {
-      currentVideoRef.current.classList.add('sliding')
-      nextVideoRef.current.classList.remove('sliding')
-      nextVideoRef.current.classList.remove('fade-in')
-      nextVideoRef.current.src = prevVideoRef.current.src
-    } else {
-      nextVideoRef.current.classList.add('sliding')
-      nextVideoRef.current.classList.add('fade-in')
-      currentVideoRef.current.classList.remove('sliding')
-      currentVideoRef.current.classList.remove('fade-in')
+    if (zIndex.next === 3) {
       currentVideoRef.current.src = prevVideoRef.current.src
+      nextVideoRef.current.classList.add('sliding');
+      getSlidingRef2(nextVideoRef.current)
+    } else if (zIndex.current === 3) {
+      nextVideoRef.current.src = prevVideoRef.current.src
+      currentVideoRef.current.classList.add('sliding');
+      getSlidingRef(currentVideoRef.current)
+    } else if (zIndex.prev === 3) {
+      prevVideoRef.current.classList.add('sliding');
+      getSlidingRef2(prevVideoRef.current)
     }
 
-    setTimeout(() => {
-      setIsSliding(false)
-      if (page != 2) {
-      setPrevVideoIndex((prevIndex) => (prevIndex === 0 ? videoList.length - 1 : prevIndex - 1)) // prevIndex is current index
-      }
-    }, 1000)
-    
+    function getSlidingRef(videoRef) {
+      setTimeout(() => {
+        prevVideoRef.current.src = videoList[previousVideo]
+        setZIndex({ current: 2, next: 3, prev: 1 })
+        videoRef.classList.remove('sliding')
+      }, 1000)
+    }
+
+    function getSlidingRef2(videoRef) {
+      setTimeout(() => {
+        prevVideoRef.current.src = videoList[previousVideo]
+        setZIndex({ current: 3, next: 2, prev: 1 })
+        videoRef.classList.remove('sliding')
+      }, 1000)
+    }
   }
 
   const handleRightClick = () => {
-    if (isSliding || endReached) return
+    //if (isSliding || endReached) return
     setIsSliding(true)
     setRightClicked(true);
-
+    const nextVideo = page + 1
+    setTimeout(() => setRightClicked(false), 180)
     if (page == videoList.length -1) {
       setEndReached(true)
     } else {
       setEndReached(false)
     }
-    setPrevVideoIndex(page - 1)
     setPage((prevPage) => prevPage + 1);
     
-    setTimeout(() => setRightClicked(false), 180)
+    if (zIndex.next === 3) {
+      nextVideoRef.current.classList.add('sliding');
+      getSlidingRef2(nextVideoRef.current)
+    } else if (zIndex.current === 3) {
+      currentVideoRef.current.classList.add('sliding');
+      getSlidingRef(currentVideoRef.current)
+    } else if (zIndex.prev === 3) {
+      prevVideoRef.current.classList.add('sliding');
+      getSlidingRef(prevVideoRef.current)
+    }
 
-    if (page % 2 !== 0) {
-      console.log("if");
-      
-      currentVideoRef.current.classList.add('sliding')
-      
+    function getSlidingRef(videoRef) {
       setTimeout(() => {
-        setIsSliding(false)
-        currentVideoRef.current.classList.remove('sliding')
-        nextVideoRef.current.classList.remove('fade-out')
-        currentVideoRef.current.classList.remove('fade-in')
-        currentVideoRef.current.classList.add('fade-out')
-        nextVideoRef.current.classList.add('fade-in')
-        setCurrentVideoIndex((prevIndex) => (prevIndex === videoList.length - 1 ? 0 : prevIndex + 2))
-        if (!videoPaused) nextVideoRef.current.play()
+        prevVideoRef.current.src = videoRef.src
+        currentVideoRef.current.src = videoList[nextVideo]
+        setZIndex({ current: 2, next: 3, prev: 1 })
+        videoRef.classList.remove('sliding')
       }, 1000)
+    }
 
-    } else {
-      console.log("else");
-      nextVideoRef.current.classList.add('sliding')
-
+    function getSlidingRef2(videoRef) {
       setTimeout(() => {
-        setIsSliding(false)
-        nextVideoRef.current.classList.remove('sliding')
-        currentVideoRef.current.classList.remove('fade-out')
-        nextVideoRef.current.classList.remove('fade-in')
-        currentVideoRef.current.classList.add('fade-in')
-        nextVideoRef.current.classList.add('fade-out')
-        setNextVideoIndex((prevIndex) => (prevIndex === videoList.length - 1 ? 0 : prevIndex + 2))
-        if (!videoPaused) currentVideoRef.current.play()
+        prevVideoRef.current.src = videoRef.src
+        nextVideoRef.current.src = videoList[nextVideo]
+        setZIndex({ current: 3, next: 2, prev: 1 })
+        videoRef.classList.remove('sliding')
       }, 1000)
+      
     }
   }
 
@@ -127,6 +134,7 @@ function RegisterPage() {
           src={videoList[prevVideoIndex]}
           loop
           muted
+          style={{ zIndex: zIndex.prev }}
           onClick={() => toggleVideoPlay(prevVideoRef)}
         />}
         <video
@@ -135,6 +143,7 @@ function RegisterPage() {
             src={videoList[nextVideoIndex]}
             loop
             muted
+            style={{ zIndex: zIndex.next }}
             onClick={() => toggleVideoPlay(nextVideoRef)}
           />
         <video
@@ -143,6 +152,7 @@ function RegisterPage() {
           src={videoList[currentVideoIndex]}
           loop
           muted
+          style={{ zIndex: zIndex.current }}
           onClick={() => toggleVideoPlay(currentVideoRef)}
         />
         <div onClick={toggleVideoPlay} className={`gifButton ${videoPaused ? '' : 'playing'}`}>GIF</div>
