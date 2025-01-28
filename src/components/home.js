@@ -13,97 +13,108 @@ function RegisterPage() {
   const [leftClicked, setLeftClicked] = useState(false);
   const [rightClicked, setRightClicked] = useState(false);
   const [loadArrowButtons, setLoadArrowButtons] = useState(false);
-  const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
-  const [nextVideoIndex, setNextVideoIndex] = useState(1);
-  const [prevVideoIndex, setPrevVideoIndex] = useState(0);
   const currentVideoRef = useRef(null);
   const nextVideoRef = useRef(null);
   const prevVideoRef = useRef(null);
   const [isSliding, setIsSliding] = useState(false);
   const [videoPaused, setVideoPaused] = useState(true);
   const [page, setPage] = useState(1);
-  const [endReached, setEndReached] = useState(false);
   const [zIndex, setZIndex] = useState({ current: 3, next: 2, prev: 1 })
 
 
   setTimeout(() => setLoadArrowButtons(true), 1000)
 
   const handleLeftClick = () => {
-   // if (isSliding) return
-    const previousVideo = page - 3
-    setIsSliding(true)
-    setLeftClicked(true);
-    setPage((prevPage) => prevPage - 1);
-    setTimeout(() => setLeftClicked(false), 180)
+    let previousVideo = 0
+    if (isSliding) return
 
+    const newPage = page === 1 ? videoList.length : page - 1
+    setPage(newPage)
+    
+    if (newPage == videoList.length ) {
+      previousVideo = newPage - 2
+    } else {
+      previousVideo = page - 3
+    }
+    
+    setIsSliding(true)
+    setLeftClicked(true)
+    setTimeout(() => setLeftClicked(false), 180)
+    
     if (zIndex.next === 3) {
       currentVideoRef.current.src = prevVideoRef.current.src
-      nextVideoRef.current.classList.add('slidingRight');
-      getSlidingRef2(nextVideoRef.current)
+      if (!videoPaused) currentVideoRef.current.play()
+      nextVideoRef.current.classList.add('slidingRight')
+      getSlidingRef(nextVideoRef.current, 3, 2)
+
     } else if (zIndex.current === 3) {
       nextVideoRef.current.src = prevVideoRef.current.src
-      currentVideoRef.current.classList.add('slidingRight');
-      getSlidingRef(currentVideoRef.current)
+      if (!videoPaused) nextVideoRef.current.play()
+      currentVideoRef.current.classList.add('slidingRight')
+      getSlidingRef(currentVideoRef.current, 2, 3)
     }
 
-    function getSlidingRef(videoRef) {
+    function getSlidingRef(videoRef, i1, i2) {
       setTimeout(() => {
-        prevVideoRef.current.src = videoList[previousVideo]
-        setZIndex({ current: 2, next: 3, prev: 1 })
+        if (newPage == 1) {
+          prevVideoRef.current.src = videoList[videoList.length-1]
+        } else {
+          prevVideoRef.current.src = videoList[previousVideo]
+        }
+        
+        setZIndex({ current: i1, next: i2 })
         videoRef.classList.remove('slidingRight')
-      }, 1000)
-    }
-
-    function getSlidingRef2(videoRef) {
-      setTimeout(() => {
-        prevVideoRef.current.src = videoList[previousVideo]
-        setZIndex({ current: 3, next: 2, prev: 1 })
-        videoRef.classList.remove('slidingRight')
+        setIsSliding(false)
       }, 1000)
     }
   }
 
   const handleRightClick = () => {
-   // if (isSliding || endReached) return
+    if (isSliding ) return
     setIsSliding(true)
-    setRightClicked(true);
-    const nextVideo = page + 1
+    setRightClicked(true)
     setTimeout(() => setRightClicked(false), 180)
-    if (page == videoList.length -1) {
-      setEndReached(true)
-    } else {
-      setEndReached(false)
+  
+    const newPage = page === videoList.length ? 1 : page + 1
+    setPage(newPage)
+
+    if (page == videoList.length) {
+      const pageTrackers = document.querySelectorAll('.pageTracker');
+      let i = pageTrackers.length - 1
+        
+        function trackerAnimation() {
+          i--
+          pageTrackers[i].classList.add("current")
+          setTimeout(() => pageTrackers[i].classList.remove("current"), 500)
+          if (i == 0) clearInterval(intervalId)
+        }
+
+        const intervalId = setInterval(trackerAnimation, 600)
     }
-    setPage((prevPage) => prevPage + 1);
-    
+
+  
     if (zIndex.next === 3) {
-      nextVideoRef.current.classList.add('sliding');
-      getSlidingRef2(nextVideoRef.current)
-    } else if (zIndex.current === 3) {
-      currentVideoRef.current.classList.add('sliding');
-      getSlidingRef(currentVideoRef.current)
-    }
-
-    function getSlidingRef(videoRef) {
-      setTimeout(() => {
-        prevVideoRef.current.src = videoRef.src
-        currentVideoRef.current.src = videoList[nextVideo]
-        setZIndex({ current: 2, next: 3, prev: 1 })
-        videoRef.classList.remove('sliding')
-      }, 1000)
-    }
-
-    function getSlidingRef2(videoRef) {
-      setTimeout(() => {
-        prevVideoRef.current.src = videoRef.src
-        nextVideoRef.current.src = videoList[nextVideo]
-        setZIndex({ current: 3, next: 2, prev: 1 })
-        videoRef.classList.remove('sliding')
-      }, 1000)
+      nextVideoRef.current.classList.add("sliding")
+      videoPaused ? currentVideoRef.current.pause() : currentVideoRef.current.play()
+      getSlidingRef(nextVideoRef.current, 3, 2, newPage)
       
+    } else if (zIndex.current === 3) {
+      currentVideoRef.current.classList.add("sliding")
+      videoPaused ? nextVideoRef.current.pause(): nextVideoRef.current.play()
+      getSlidingRef(currentVideoRef.current, 2, 3, newPage)
     }
   }
-
+  
+  function getSlidingRef(videoRef, i1, i2, newPage) {
+    setTimeout(() => {
+      prevVideoRef.current.src = videoRef.src
+      newPage === videoList.length ? videoRef.src = videoList[0] : videoRef.src = videoList[newPage]
+      setZIndex({ current: i1, next: i2, prev: 1 })
+      videoRef.classList.remove("sliding")
+      setIsSliding(false)
+    }, 1000)
+  }
+  
   const toggleVideoPlay = (videoRef) => {
     setTimeout(() => {
       if (!videoPaused) {
@@ -121,20 +132,18 @@ function RegisterPage() {
     <div className="App">
       <h1>Portfolio</h1>
       <div className='videoContainer'>
-      {prevVideoIndex >= 0 &&
       <video
           className='previousVideo'
           ref={prevVideoRef}
-          src={videoList[prevVideoIndex]}
+          src={videoList[videoList.length-1]}
           loop
           muted
           style={{ zIndex: zIndex.prev }}
-          onClick={() => toggleVideoPlay(prevVideoRef)}
-        />}
+        />
         <video
             className='nextVideo'
             ref={nextVideoRef}
-            src={videoList[nextVideoIndex]}
+            src={videoList[1]}
             loop
             muted
             style={{ zIndex: zIndex.next }}
@@ -143,7 +152,7 @@ function RegisterPage() {
         <video
           className='currentVideo'
           ref={currentVideoRef}
-          src={videoList[currentVideoIndex]}
+          src={videoList[0]}
           loop
           muted
           style={{ zIndex: zIndex.current }}
@@ -158,10 +167,12 @@ function RegisterPage() {
         >
           <div className={` ${leftClicked ? 'clicked' : ''}`}></div>
         </div>
-        {page}
+        {videoList.map((_, index) => (
+          <div key={index} className={`pageTracker ${index + 1 == page ? 'current' : ''}`}></div>
+        ))}
         <div
           onMouseDown={handleRightClick}
-          className={`arrowRight ${loadArrowButtons ? 'loaded' : ''}${endReached ? ' endReached' : ''}`}
+          className={`arrowRight ${loadArrowButtons ? 'loaded' : ''}`}
         >
           <div className={` ${rightClicked ? 'clicked' : ''}`}></div>
         </div>
@@ -171,3 +182,6 @@ function RegisterPage() {
 }
 
 export default RegisterPage;
+      // for (let i = pageTrackers.length - 1; i >= 0; i--) {
+
+      // }

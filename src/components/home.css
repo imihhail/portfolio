@@ -26,10 +26,6 @@ img {
   border-radius: 50%;
 }
 
-.arrowRight.endReached {
-  opacity: 0.4;
-}
-
 .arrowLeft.loaded, .arrowRight.loaded {
   position: relative;
   background: white;
@@ -79,6 +75,22 @@ img {
   border-top: 5px solid rgb(145, 145, 145);
   border-left: 5px solid rgb(145, 145, 145);
   right: 13px;
+}
+
+.pageTracker {
+  align-self: center;
+  background: white;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  margin: 5px;
+  transition: 0.4s ease;
+}
+
+.pageTracker.current {
+  width: 27px;
+  height: 27px;
+  background: rgb(68, 68, 68);
 }
 
 .videoContainer {
@@ -175,3 +187,4 @@ img {
 .gifButton.playing {
   display: none;
 }
+
