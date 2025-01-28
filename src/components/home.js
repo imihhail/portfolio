@@ -29,7 +29,7 @@ function RegisterPage() {
   setTimeout(() => setLoadArrowButtons(true), 1000)
 
   const handleLeftClick = () => {
-    //if (isSliding) return
+   // if (isSliding) return
     const previousVideo = page - 3
     setIsSliding(true)
     setLeftClicked(true);
@@ -38,22 +38,19 @@ function RegisterPage() {
 
     if (zIndex.next === 3) {
       currentVideoRef.current.src = prevVideoRef.current.src
-      nextVideoRef.current.classList.add('sliding');
+      nextVideoRef.current.classList.add('slidingRight');
       getSlidingRef2(nextVideoRef.current)
     } else if (zIndex.current === 3) {
       nextVideoRef.current.src = prevVideoRef.current.src
-      currentVideoRef.current.classList.add('sliding');
+      currentVideoRef.current.classList.add('slidingRight');
       getSlidingRef(currentVideoRef.current)
-    } else if (zIndex.prev === 3) {
-      prevVideoRef.current.classList.add('sliding');
-      getSlidingRef2(prevVideoRef.current)
     }
 
     function getSlidingRef(videoRef) {
       setTimeout(() => {
         prevVideoRef.current.src = videoList[previousVideo]
         setZIndex({ current: 2, next: 3, prev: 1 })
-        videoRef.classList.remove('sliding')
+        videoRef.classList.remove('slidingRight')
       }, 1000)
     }
 
@@ -61,13 +58,13 @@ function RegisterPage() {
       setTimeout(() => {
         prevVideoRef.current.src = videoList[previousVideo]
         setZIndex({ current: 3, next: 2, prev: 1 })
-        videoRef.classList.remove('sliding')
+        videoRef.classList.remove('slidingRight')
       }, 1000)
     }
   }
 
   const handleRightClick = () => {
-    //if (isSliding || endReached) return
+   // if (isSliding || endReached) return
     setIsSliding(true)
     setRightClicked(true);
     const nextVideo = page + 1
@@ -85,9 +82,6 @@ function RegisterPage() {
     } else if (zIndex.current === 3) {
       currentVideoRef.current.classList.add('sliding');
       getSlidingRef(currentVideoRef.current)
-    } else if (zIndex.prev === 3) {
-      prevVideoRef.current.classList.add('sliding');
-      getSlidingRef(prevVideoRef.current)
     }
 
     function getSlidingRef(videoRef) {

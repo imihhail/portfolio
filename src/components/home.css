@@ -89,7 +89,7 @@ img {
   margin: auto;
   width: 50%;
   padding-top: 28.125%; /* 16:9 aspect ratio */
-  /* overflow: hidden; */
+  overflow: hidden;
 }
 
 .nextVideo, .previousVideo, .currentVideo {
@@ -101,8 +101,6 @@ img {
   object-fit: cover;
   cursor: pointer;
 }
-
-
 
 @keyframes slide {
   0% {
@@ -120,6 +118,22 @@ img {
   }
 }
 
+@keyframes slideRight {
+  0% {
+    transform: translateX(0);
+  }
+  90% {
+    opacity: 1;
+  }
+  95% {
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
 .currentVideo.sliding {
   animation: slide 1s ease-in forwards;
 }
@@ -128,25 +142,14 @@ img {
   animation: slide 1s ease-in forwards;
 }
 
-.previousVideo.sliding {
-  animation: slide 1s ease-in forwards;
+.currentVideo.slidingRight {
+  animation: slideRight 1s ease-in forwards;
 }
 
-/* .nextVideo.fade-in {
-  z-index: 2;
+.nextVideo.slidingRight {
+  animation: slideRight 1s ease-in forwards;
 }
 
-.currentVideo.fade-in {
-  z-index: 2;
-}
-
-.nextVideo.fade-out {
-  z-index: 1;
-}
-
-.currentVideo.fade-out {
-  z-index: 1;
-} */
 
 .gifButton {
   background: black;
