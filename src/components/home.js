@@ -19,6 +19,7 @@ function RegisterPage() {
   const [isSliding, setIsSliding] = useState(false);
   const [videoPaused, setVideoPaused] = useState(true);
   const [page, setPage] = useState(1);
+  const [turn, setTurn] = useState(1);
   const [zIndex, setZIndex] = useState({ current: 3, next: 2, prev: 1 })
 
 
@@ -77,21 +78,46 @@ function RegisterPage() {
   
     const newPage = page === videoList.length ? 1 : page + 1
     setPage(newPage)
-
-    if (page == videoList.length) {
+    if (page !== videoList.length) {
+      setTurn(newPage)
+    }
+    
+    if (turn == videoList.length) {
       const pageTrackers = document.querySelectorAll('.pageTracker');
-      let i = pageTrackers.length - 1
+      let i = pageTrackers.length
+      let y = pageTrackers.length
         
         function trackerAnimation() {
           i--
           pageTrackers[i].classList.add("current")
-          setTimeout(() => pageTrackers[i].classList.remove("current"), 500)
-          if (i == 0) clearInterval(intervalId)
+          if (i != 0) {
+            
+          }
+          
+          if (i == 0){
+            clearInterval(intervalId)
+            setTurn(newPage)
+          }
         }
+        const intervalId = setInterval(trackerAnimation, 70)
 
-        const intervalId = setInterval(trackerAnimation, 600)
+
+        setTimeout(() => {
+          function trackerAnimation2() {
+            y--
+            if (y != 0) {
+              pageTrackers[y].classList.remove("current")
+            }
+            
+            if (y == 0){
+              clearInterval(intervalId2)
+              setTurn(newPage)
+            }
+          }
+          const intervalId2 = setInterval(trackerAnimation2, 70)
+        }, 210)
+
     }
-
   
     if (zIndex.next === 3) {
       nextVideoRef.current.classList.add("sliding")
@@ -168,7 +194,7 @@ function RegisterPage() {
           <div className={` ${leftClicked ? 'clicked' : ''}`}></div>
         </div>
         {videoList.map((_, index) => (
-          <div key={index} className={`pageTracker ${index + 1 == page ? 'current' : ''}`}></div>
+          <div key={index} className={`pageTracker ${index + 1 == turn ? 'current' : ''}`}></div>
         ))}
         <div
           onMouseDown={handleRightClick}
