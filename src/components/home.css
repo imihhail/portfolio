@@ -88,8 +88,8 @@ img {
 }
 
 .pageTracker.current {
-  width: 27px;
-  height: 27px;
+  width: 28px;
+  height: 28px;
   background: rgb(68, 68, 68);
 }
 
@@ -118,12 +118,7 @@ img {
   0% {
     transform: translateX(0);
   }
-  90% {
-    opacity: 1;
-  }
-  95% {
-    opacity: 0;
-  }
+
   100% {
     transform: translateX(-100%);
     opacity: 0;
@@ -134,15 +129,9 @@ img {
   0% {
     transform: translateX(0);
   }
-  90% {
-    opacity: 1;
-  }
-  95% {
-    opacity: 0;
-  }
+
   100% {
     transform: translateX(100%);
-    opacity: 0;
   }
 }
 

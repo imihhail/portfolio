@@ -19,7 +19,7 @@ function RegisterPage() {
   const [isSliding, setIsSliding] = useState(false);
   const [videoPaused, setVideoPaused] = useState(true);
   const [page, setPage] = useState(1);
-  const [turn, setTurn] = useState(1);
+  const [activeTracker, setActiveTracker] = useState(1);
   const [zIndex, setZIndex] = useState({ current: 3, next: 2, prev: 1 })
 
 
@@ -31,6 +31,40 @@ function RegisterPage() {
 
     const newPage = page === 1 ? videoList.length : page - 1
     setPage(newPage)
+
+    if (page !== 1) {
+      setActiveTracker(newPage)
+    }
+    
+    if (activeTracker == 1) {
+      const pageTrackers = document.querySelectorAll('.pageTracker');
+      let i = 0
+      let y = 0
+        
+        function addGlow() {
+          i++
+          pageTrackers[i].classList.add("current")
+          if (i == pageTrackers.length - 1){
+            clearInterval(glowIntervalId)
+          }
+        }
+        const glowIntervalId = setInterval(addGlow, 70)
+
+        setTimeout(() => {
+          function removeGlow() {
+           
+            if (y != pageTrackers.length - 1) {
+              pageTrackers[y].classList.remove("current")
+            }
+             y++
+            if (y == pageTrackers.length - 1){
+              clearInterval(removeGlowIntervalId)
+              setActiveTracker(newPage)
+            }
+          }
+          const removeGlowIntervalId = setInterval(removeGlow, 70)
+        }, 210)
+    }
     
     if (newPage == videoList.length ) {
       previousVideo = newPage - 2
@@ -45,13 +79,13 @@ function RegisterPage() {
     if (zIndex.next === 3) {
       currentVideoRef.current.src = prevVideoRef.current.src
       if (!videoPaused) currentVideoRef.current.play()
-      nextVideoRef.current.classList.add('slidingRight')
+      //nextVideoRef.current.classList.add('slidingRight')
       getSlidingRef(nextVideoRef.current, 3, 2)
 
     } else if (zIndex.current === 3) {
       nextVideoRef.current.src = prevVideoRef.current.src
       if (!videoPaused) nextVideoRef.current.play()
-      currentVideoRef.current.classList.add('slidingRight')
+      //currentVideoRef.current.classList.add('slidingRight')
       getSlidingRef(currentVideoRef.current, 2, 3)
     }
 
@@ -64,7 +98,7 @@ function RegisterPage() {
         }
         
         setZIndex({ current: i1, next: i2 })
-        videoRef.classList.remove('slidingRight')
+       // videoRef.classList.remove('slidingRight')
         setIsSliding(false)
       }, 1000)
     }
@@ -79,44 +113,37 @@ function RegisterPage() {
     const newPage = page === videoList.length ? 1 : page + 1
     setPage(newPage)
     if (page !== videoList.length) {
-      setTurn(newPage)
+      setActiveTracker(newPage)
     }
     
-    if (turn == videoList.length) {
+    if (activeTracker == videoList.length) {
       const pageTrackers = document.querySelectorAll('.pageTracker');
       let i = pageTrackers.length
       let y = pageTrackers.length
         
-        function trackerAnimation() {
+        function addGlow() {
           i--
           pageTrackers[i].classList.add("current")
-          if (i != 0) {
-            
-          }
-          
           if (i == 0){
-            clearInterval(intervalId)
-            setTurn(newPage)
+            clearInterval(glowIntervalId)
           }
         }
-        const intervalId = setInterval(trackerAnimation, 70)
-
+        const glowIntervalId = setInterval(addGlow, 70)
 
         setTimeout(() => {
-          function trackerAnimation2() {
+          function removeGlow() {
             y--
             if (y != 0) {
               pageTrackers[y].classList.remove("current")
             }
             
             if (y == 0){
-              clearInterval(intervalId2)
-              setTurn(newPage)
+              clearInterval(removeGlowIntervalId)
+              setActiveTracker(newPage)
             }
           }
-          const intervalId2 = setInterval(trackerAnimation2, 70)
+          const removeGlowIntervalId = setInterval(removeGlow, 70)
         }, 210)
-
     }
   
     if (zIndex.next === 3) {
@@ -167,7 +194,7 @@ function RegisterPage() {
           style={{ zIndex: zIndex.prev }}
         />
         <video
-            className='nextVideo'
+            className="nextVideo"
             ref={nextVideoRef}
             src={videoList[1]}
             loop
@@ -176,7 +203,7 @@ function RegisterPage() {
             onClick={() => toggleVideoPlay(nextVideoRef)}
           />
         <video
-          className='currentVideo'
+          className={`currentVideo ${isSliding ? 'slidingRight' : ''}`}
           ref={currentVideoRef}
           src={videoList[0]}
           loop
@@ -194,7 +221,7 @@ function RegisterPage() {
           <div className={` ${leftClicked ? 'clicked' : ''}`}></div>
         </div>
         {videoList.map((_, index) => (
-          <div key={index} className={`pageTracker ${index + 1 == turn ? 'current' : ''}`}></div>
+          <div key={index} className={`pageTracker ${index + 1 == activeTracker ? 'current' : ''}`}></div>
         ))}
         <div
           onMouseDown={handleRightClick}
@@ -208,6 +235,3 @@ function RegisterPage() {
 }
 
 export default RegisterPage;
-      // for (let i = pageTrackers.length - 1; i >= 0; i--) {
-
-      // }
