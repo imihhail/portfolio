@@ -114,7 +114,7 @@ img {
   cursor: pointer;
 }
 
-@keyframes slide {
+@keyframes slideLeft {
   0% {
     transform: translateX(0);
   }
@@ -135,19 +135,19 @@ img {
   }
 }
 
-.currentVideo.sliding {
-  animation: slide 1s ease-in forwards;
+.currentVideo.slideLeft {
+  animation: slideLeft 1s ease-in forwards;
 }
 
-.nextVideo.sliding {
-  animation: slide 1s ease-in forwards;
+.nextVideo.slideLeft {
+  animation: slideLeft 1s ease-in forwards;
 }
 
-.currentVideo.slidingRight {
+.currentVideo.slideRight {
   animation: slideRight 1s ease-in forwards;
 }
 
-.nextVideo.slidingRight {
+.nextVideo.slideRight {
   animation: slideRight 1s ease-in forwards;
 }
 
