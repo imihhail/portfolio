@@ -8,7 +8,7 @@ import crypt from '../assets/crypt.mp4';
 import test from '../assets/test.mp4';
 
 
-function RegisterPage() {
+function Projects() {
   const videoList = [bomberman, api, pagoda, crypt, test];
   const [leftClicked, setLeftClicked] = useState(false);
   const [rightClicked, setRightClicked] = useState(false);
@@ -61,7 +61,7 @@ function RegisterPage() {
             ...prevState,
             [positionChoice]: false,
           }))
-        }, 1000)
+        }, 700)
 
     // PageTracker reverse animation when current page is first page
     if (activeTracker == 1) {
@@ -146,39 +146,16 @@ function RegisterPage() {
     videoPaused ? top.current.pause() : bot.current.play()
     setTimeout(() => {
       prevVideoRef.current.src = top.current.src
-      newPage === videoList.length ? top.src = videoList[0] : top.src = videoList[newPage]
+      newPage === videoList.length ? top.current.src = videoList[0] : top.current.src = videoList[newPage]
       setZIndex({ current: zInd_1, next: zInd_2 })
       setSliding(prevState => ({
         ...prevState,
         [positionChoice]: false,
       }))
-    }, 1000)
-
-  
-    // if (zIndex.next === 3) {
-    //   nextVideoRef.current.classList.add("sliding")
-    //   videoPaused ? currentVideoRef.current.pause() : currentVideoRef.current.play()
-    //   getSlidingRef(nextVideoRef.current, 3, 2, newPage)
-      
-    // } else if (zIndex.current === 3) {
-    //   currentVideoRef.current.classList.add("sliding")
-    //   videoPaused ? nextVideoRef.current.pause(): nextVideoRef.current.play()
-    //   getSlidingRef(currentVideoRef.current, 2, 3, newPage)
-    // }
+    }, 700)
   }
-  
-  // function getSlidingRef(videoRef, i1, i2, newPage) {
-  //   setTimeout(() => {
-  //     prevVideoRef.current.src = videoRef.src
-  //     newPage === videoList.length ? videoRef.src = videoList[0] : videoRef.src = videoList[newPage]
-  //     setZIndex({ current: i1, next: i2, prev: 1 })
-  //     videoRef.classList.remove("sliding")
-  //   }, 1000)
-  // }
-  
-  const toggleVideoPlay = (e, videoRef) => {
-    console.log(e);
-    
+   
+  const toggleVideoPlay = (videoRef) => {
     setTimeout(() => {
       if (!videoPaused) {
         videoRef.current.pause()
@@ -193,7 +170,6 @@ function RegisterPage() {
   //}, isSliding ? 700 : 0)
   return (
     <div className="App">
-      <h1>Portfolio</h1>
       <div className='videoContainer'>
       <video
           className='previousVideo'
@@ -225,7 +201,9 @@ function RegisterPage() {
           style={{ zIndex: zIndex.current }}
           onClick={() => toggleVideoPlay(currentVideoRef)}
         />
-        <div onClick={toggleVideoPlay} className={`gifButton ${videoPaused ? '' : 'playing'}`}>GIF</div>
+        <div onClick={toggleVideoPlay} className={`gifButton ${videoPaused ? '' : 'playing'}`}>
+          <div className='playButton'></div>
+        </div>
       </div>
       <div className="arrows">
         <div
@@ -248,4 +226,4 @@ function RegisterPage() {
   )
 }
 
-export default RegisterPage;
+export default Projects;

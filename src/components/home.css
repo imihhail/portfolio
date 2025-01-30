@@ -1,13 +1,12 @@
 body {
-  background: linear-gradient(black, gray, gray);
+  background-image: linear-gradient(rgb(15, 15, 15), rgb(11, 16, 26), rgb(15, 15, 15));
   background-size: cover;
   background-repeat: repeat;
   background-attachment: fixed;
 }
 
 .App {
-  text-align: center;
-  color: rgb(255, 255, 255);
+
 }
 
 img {
@@ -17,10 +16,11 @@ img {
 }
 
 .arrows {
-  display: flex;
+  display: inline-flex;
   justify-content: center;
   box-sizing: border-box;
 }
+
 
 .arrowLeft, .arrowRight {
   border-radius: 50%;
@@ -102,6 +102,8 @@ img {
   width: 50%;
   padding-top: 28.125%; /* 16:9 aspect ratio */
   overflow: hidden;
+  border: #000000 0px solid;
+  border-radius: 20px;
 }
 
 .nextVideo, .previousVideo, .currentVideo {
@@ -121,7 +123,6 @@ img {
 
   100% {
     transform: translateX(-100%);
-    opacity: 0;
   }
 }
 
@@ -136,19 +137,19 @@ img {
 }
 
 .currentVideo.slideLeft {
-  animation: slideLeft 1s ease-in forwards;
+  animation: slideLeft 0.7s  ease-out forwards;
 }
 
 .nextVideo.slideLeft {
-  animation: slideLeft 1s ease-in forwards;
+  animation: slideLeft 0.7s  ease-out forwards;
 }
 
 .currentVideo.slideRight {
-  animation: slideRight 1s ease-in forwards;
+  animation: slideRight 0.7s  ease-out forwards;
 }
 
 .nextVideo.slideRight {
-  animation: slideRight 1s ease-in forwards;
+  animation: slideRight 0.7s  ease-out forwards;
 }
 
 
@@ -158,7 +159,7 @@ img {
   font-size: 1.5vw;
   font-weight: bold;
   border-radius: 50%;
-  width: 10%;
+  width: 7vw;
   aspect-ratio: 1 / 1;
   display: flex;
   justify-content: center;
@@ -177,3 +178,11 @@ img {
   display: none;
 }
 
+.playButton {
+  border: calc(0.35 * 7vw) solid transparent; /* 30% of gifButton's width */
+  border-radius: 5px;
+  border-left-color: rgb(251, 251, 251);
+  width: 0px;
+  height: 3px;
+  transform: scaleY(0.7) translateX(33%);
+}
