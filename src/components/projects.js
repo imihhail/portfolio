@@ -154,7 +154,7 @@ function Projects() {
       }))
     }, 700)
   }
-   
+
   const toggleVideoPlay = (videoRef) => {
     setTimeout(() => {
       if (!videoPaused) {
@@ -170,15 +170,16 @@ function Projects() {
   //}, isSliding ? 700 : 0)
   return (
     <div className="App">
+      <div className='contentContainer'>
       <div className='videoContainer'>
-      <video
-          className='previousVideo'
-          ref={prevVideoRef}
-          src={videoList[videoList.length-1]}
-          loop
-          muted
-          style={{ zIndex: zIndex.prev }}
-        />
+        <video
+            className='previousVideo'
+            ref={prevVideoRef}
+            src={videoList[videoList.length-1]}
+            loop
+            muted
+            style={{ zIndex: zIndex.prev }}
+          />
         <video
             className={`nextVideo ${sliding.botRight ? 'slideRight' : ''}${sliding.botLeft ? 'slideLeft' : ''}`}
             ref={nextVideoRef}
@@ -221,6 +222,7 @@ function Projects() {
         >
           <div className={` ${rightClicked ? 'clicked' : ''}`}></div>
         </div>
+      </div>
       </div>
     </div>
   )
