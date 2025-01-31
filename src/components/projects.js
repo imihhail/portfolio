@@ -1,15 +1,16 @@
 import './home.css';
 import { useRef, useState} from 'react';
 
-import pagoda from '../assets/pagoda.mp4';
+
 import api from '../assets/api.mp4';
 import bomberman from '../assets/bomberman.mp4';
-import crypt from '../assets/crypt.mp4';
-import test from '../assets/test.mp4';
+import tetris from '../assets/tetris.mp4';
+import snetwork from '../assets/snetwork.mp4';
+import messenger from '../assets/messenger.mp4';
 
 
 function Projects() {
-  const videoList = [bomberman, api, pagoda, crypt, test];
+  const videoList = [api, messenger, tetris, bomberman, snetwork];
   const [leftClicked, setLeftClicked] = useState(false);
   const [rightClicked, setRightClicked] = useState(false);
   const [loadArrowButtons, setLoadArrowButtons] = useState(false);

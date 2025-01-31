@@ -2,7 +2,9 @@ import './models.css';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls, useGLTF, Environment } from '@react-three/drei';
 import { EffectComposer, Bloom, ToneMapping } from '@react-three/postprocessing';
-import pagodaGLB from '../assets/pagoda.glb'; // Make sure you have this file
+import pagodaGLB from '../assets/SM_Pagoda.glb';
+import customHDRI from '../assets/chinese.exr';
+
 
 
 function Models() {
@@ -26,7 +28,7 @@ function Models() {
     
             {/* Effects */}
             <OrbitControls enableDamping autoRotate autoRotateSpeed={0.5} />
-            <Environment preset="forest" background />
+            <Environment files= {customHDRI} background />
             <EffectComposer>
               <ToneMapping />
               <Bloom intensity={0.3} luminanceThreshold={0.2} />

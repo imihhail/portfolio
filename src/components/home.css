@@ -1,16 +1,23 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
 body {
-  background-image: linear-gradient(rgb(15, 15, 15), rgb(58, 34, 34), rgb(15, 15, 15));
+  
+  background: radial-gradient(circle at 50% 65%, #0b1316, #050505);
+ 
   background-size: cover;
-  background-repeat: repeat;
   background-attachment: fixed;
+  font-family: 'Orbitron', sans-serif; /* Futuristic font */
+  text-shadow: 0px 0px 10px rgba(0, 195, 255, 0.8);
 }
+
+
 
 .App {
 
 }
 
 .contentContainer {
-  background-image: linear-gradient(rgb(15, 15, 15), rgb(41, 23, 23), rgb(15, 15, 15));
   background-size: cover;
   position: absolute;
   display: flex;
@@ -19,7 +26,6 @@ body {
   left: 50%;
   transform: translate(-50%, -50%);
   width: 50%;
-  border-radius: 20px;
   padding: 2% 5%;
   padding-bottom: 0.7%;
 }
@@ -33,8 +39,17 @@ body {
   width: 100%;
   padding-top: 56.25%; /* 16:9 aspect ratio */
   overflow: hidden;
-  border: #091827 0px solid;
-  border-radius: 20px;
+  border: rgb(0, 195, 255) 3px solid;
+  box-shadow: 0 0 20px rgb(0, 195, 255);
+  transition: box-shadow 0.5s ease-in-out;
+}
+.currentVideo.loading {
+  animation: pulseGlow 1.5s infinite alternate;
+}
+
+@keyframes pulseGlow {
+  0% { filter: brightness(1); }
+  100% { filter: brightness(1.3); }
 }
 
 .nextVideo, .previousVideo, .currentVideo {
@@ -149,17 +164,17 @@ body {
 .pageTracker {
   align-self: center;
   background: white;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  margin: 5px;
+  width: 50px;
+  height: 10px;
+  border-radius: 10%;
+  margin: 8px;
   transition: 0.2s ease;
 }
 
 .pageTracker.current {
-  width: 28px;
-  height: 28px;
-  background: rgb(148, 29, 29);
+  transform: scaley(1.3);
+  box-shadow: 0px 0px 10px rgba(0, 195, 255, 0.8);
+  background:rgb(0, 195, 255);
 }
 
 .gifButton {
@@ -168,7 +183,7 @@ body {
   font-size: 1.5vw;
   font-weight: bold;
   border-radius: 50%;
-  width: 7vw;
+  width: 6vw;
   aspect-ratio: 1 / 1;
   display: flex;
   justify-content: center;
@@ -181,6 +196,7 @@ body {
   opacity: 85%;
   letter-spacing: 2px;
   cursor: pointer;
+  transition: 0.2s ease-in-out;
 }
 
 .gifButton.playing {
@@ -188,10 +204,28 @@ body {
 }
 
 .playButton {
-  border: calc(0.35 * 7vw) solid transparent; /* 30% of gifButton's width */
+  border: calc(0.35 * 6vw) solid transparent; /* 30% of gifButton's width */
   border-radius: 5px;
-  border-left-color: rgb(251, 251, 251);
+  border-left-color: rgb(228, 228, 228);
   width: 0px;
   height: 3px;
   transform: scaleY(0.7) translateX(33%);
+}
+
+.gifButton:hover {
+  transform: translate(-50%, -50%) scale(1.1);
+  box-shadow: 0 0 20px rgba(0, 195, 255, 0.8);
+}
+/* HTML: <div class="loader"></div> */
+.loader {
+  width: 40px;
+  aspect-ratio: 1;
+  background:
+    linear-gradient(to bottom right,#0000 calc(50% - 40px),#fff 50%,#0000 calc(50% + 40px)) 
+    bottom right/calc(200% + 80px) calc(200% + 80px) 
+    orange;
+  animation: l8 1s infinite ;
+}
+@keyframes l8 {
+    100% {background-position: top left}
 }
