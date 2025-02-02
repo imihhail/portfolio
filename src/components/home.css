@@ -1,17 +1,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
 
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+
 body {
-  
   background: radial-gradient(circle at 50% 65%, #0b1316, #050505);
- 
   background-size: cover;
   background-attachment: fixed;
-  font-family: 'Orbitron', sans-serif; /* Futuristic font */
+  font-family: 'Orbitron', sans-serif; 
   text-shadow: 0px 0px 10px rgba(0, 195, 255, 0.8);
 }
-
-
 
 .App {
 
@@ -31,6 +28,7 @@ body {
 }
 
 .videoContainer {
+  border-radius: 10px;
   position: relative;
   display: flex;
   justify-content: center;
@@ -42,14 +40,6 @@ body {
   border: rgb(0, 195, 255) 3px solid;
   box-shadow: 0 0 20px rgb(0, 195, 255);
   transition: box-shadow 0.5s ease-in-out;
-}
-.currentVideo.loading {
-  animation: pulseGlow 1.5s infinite alternate;
-}
-
-@keyframes pulseGlow {
-  0% { filter: brightness(1); }
-  100% { filter: brightness(1.3); }
 }
 
 .nextVideo, .previousVideo, .currentVideo {
@@ -105,68 +95,12 @@ body {
   margin-top: 10px;
 }
 
-.arrowLeft, .arrowRight {
-  border-radius: 50%;
-}
-
-.arrowLeft.loaded, .arrowRight.loaded {
-  position: relative;
-  background: white;
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  margin: 10px;
-  transition: 0.4s ease;
-  cursor: pointer;
-  margin-bottom: 0;
-}
-
-.arrowLeft:hover, .arrowRight:hover {
-  box-shadow: 0px 0px 7px 7px hsl(0, 0%, 23%);
-}
-
-.arrowLeft div {
-  box-sizing: border-box;
-  position: absolute;
-  height: 25px;
-  width: 25px;
-  border-top: 5px solid rgb(0, 0, 0);
-  border-left: 5px solid rgb(0, 0, 0);
-  transform: rotate(-45deg);
-  top: 12.5px;
-  left: 16px;
-}
-
-.arrowRight div {
-  box-sizing: border-box;
-  position: absolute;
-  height: 25px;
-  width: 25px;
-  border-top: 5px solid rgb(0, 0, 0);
-  border-left: 5px solid rgb(0, 0, 0);
-  transform: rotate(135deg);
-  top: 12.5px;
-  right: 16px;
-}
-
-.arrowLeft div.clicked {
-  border-top: 5px solid rgb(145, 145, 145);
-  border-left: 5px solid rgb(145, 145, 145);
-  left: 13px;
-}
-
-.arrowRight div.clicked {
-  border-top: 5px solid rgb(145, 145, 145);
-  border-left: 5px solid rgb(145, 145, 145);
-  right: 13px;
-}
-
 .pageTracker {
   align-self: center;
   background: white;
   width: 50px;
   height: 10px;
-  border-radius: 10%;
+  border-radius: 3px;
   margin: 8px;
   transition: 0.2s ease;
 }
@@ -178,7 +112,7 @@ body {
 }
 
 .gifButton {
-  background: black;
+  background: rgb(4, 29, 46);
   color: white;
   font-size: 1.5vw;
   font-weight: bold;
@@ -193,7 +127,7 @@ body {
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 3;
-  opacity: 85%;
+  opacity: 95%;
   letter-spacing: 2px;
   cursor: pointer;
   transition: 0.2s ease-in-out;
@@ -204,9 +138,9 @@ body {
 }
 
 .playButton {
-  border: calc(0.35 * 6vw) solid transparent; /* 30% of gifButton's width */
+  border: calc(0.35 * 6vw) solid transparent;
   border-radius: 5px;
-  border-left-color: rgb(228, 228, 228);
+  border-left-color: rgb(0, 195, 255);
   width: 0px;
   height: 3px;
   transform: scaleY(0.7) translateX(33%);
@@ -216,16 +150,53 @@ body {
   transform: translate(-50%, -50%) scale(1.1);
   box-shadow: 0 0 20px rgba(0, 195, 255, 0.8);
 }
-/* HTML: <div class="loader"></div> */
-.loader {
-  width: 40px;
-  aspect-ratio: 1;
-  background:
-    linear-gradient(to bottom right,#0000 calc(50% - 40px),#fff 50%,#0000 calc(50% + 40px)) 
-    bottom right/calc(200% + 80px) calc(200% + 80px) 
-    orange;
-  animation: l8 1s infinite ;
+
+.aIcon, .bIcon {
+  width: 60px;
+  height: 90px;
+  color:rgb(0, 195, 255);
+  filter: drop-shadow(0px 0px 10px rgba(0, 195, 255, 0.8));
+  transform: rotateX(45deg) scale(1.5);
+  cursor: pointer;
+  transition: 0.1s linear;
 }
-@keyframes l8 {
-    100% {background-position: top left}
+
+.bIcon {
+  transform: rotateX(45deg) rotateZ(180deg) scale(1.5);
+}
+
+.bIcon:hover {
+  transform: rotateX(45deg) rotateZ(180deg) scale(1.6);
+}
+
+.aIcon:hover {
+  transform: rotateX(45deg) scale(1.6);
+}
+
+.aIcon.clicked {
+  transform: rotateX(50deg) scale(1.6) translateX(-5px);
+}
+
+.bIcon.clicked {
+  transform: rotateX(50deg) rotateZ(180deg) scale(1.6) translateX(-5px);
+}
+
+.play {
+  width: 60px;
+  height: 90px;
+  color:rgb(0, 167, 218);
+  filter: drop-shadow(0px 0px 3px rgba(0, 156, 204, 0.8));
+  display: flex;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(3.0) rotateX(0deg);
+  z-index: 3;
+  cursor: pointer;
+  transition: 0.2s ease-in-out;
+  
+}
+
+.play.playing {
+  display: none;
 }

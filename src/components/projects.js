@@ -1,5 +1,11 @@
 import './home.css';
 import { useRef, useState} from 'react';
+import { RiArrowLeftWideFill} from "react-icons/ri";
+import { RiPlayLargeFill } from "react-icons/ri";
+import { ImPlay2 } from "react-icons/im";
+import { MdOutlinePlayCircleFilled } from "react-icons/md";
+
+
 
 
 import api from '../assets/api.mp4';
@@ -33,7 +39,7 @@ function Projects() {
 
   const handleLeftClick = () => {
     setLeftClicked(true)
-    setTimeout(() => setLeftClicked(false), 180)
+    setTimeout(() => setLeftClicked(false), 100)
 
     let lowerVid = 0
     const [topRight, botRight] =
@@ -77,7 +83,7 @@ function Projects() {
           clearInterval(glowIntervalId)
         }
       }
-      const glowIntervalId = setInterval(addGlow, 70)
+      const glowIntervalId = setInterval(addGlow, 60)
 
       setTimeout(() => {
         function removeGlow() {
@@ -90,14 +96,14 @@ function Projects() {
             setActiveTracker(newPage)
           }
         }
-        const removeGlowIntervalId = setInterval(removeGlow, 70)
-      }, 210)
+        const removeGlowIntervalId = setInterval(removeGlow, 60)
+      }, 180)
     }
   }
 
   const handleRightClick = () => {
     setRightClicked(true)
-    setTimeout(() => setRightClicked(false), 180)
+    setTimeout(() => setRightClicked(false), 100)
 
     const [top, bot] =
     zIndex.current == 3 ? [currentVideoRef, nextVideoRef] : [nextVideoRef, currentVideoRef]
@@ -121,7 +127,7 @@ function Projects() {
           clearInterval(glowIntervalId)
         }
       }
-      const glowIntervalId = setInterval(addGlow, 70)
+      const glowIntervalId = setInterval(addGlow, 60)
 
       setTimeout(() => {
         function removeGlow() {
@@ -135,8 +141,8 @@ function Projects() {
             setActiveTracker(newPage)
           }
         }
-        const removeGlowIntervalId = setInterval(removeGlow, 70)
-      }, 210)
+        const removeGlowIntervalId = setInterval(removeGlow, 60)
+      }, 180)
     }
 
     setSliding(prevState => ({
@@ -204,25 +210,17 @@ function Projects() {
           onClick={() => toggleVideoPlay(currentVideoRef)}
         />
         <div onClick={toggleVideoPlay} className={`gifButton ${videoPaused ? '' : 'playing'}`}>
-          <div className='playButton'></div>
+          {/* <div className='playButton'></div> */}
         </div>
+        <ImPlay2  className='play'/>
+
       </div>
       <div className="arrows">
-        <div
-          onMouseDown={handleLeftClick}
-          className={`arrowLeft ${loadArrowButtons ? 'loaded' : ''}`}
-        >
-          <div className={` ${leftClicked ? 'clicked' : ''}`}></div>
-        </div>
-        {videoList.map((_, index) => (
-          <div key={index} className={`pageTracker ${index + 1 == activeTracker ? 'current' : ''}`}></div>
-        ))}
-        <div
-          onMouseDown={handleRightClick}
-          className={`arrowRight ${loadArrowButtons ? 'loaded' : ''}`}
-        >
-          <div className={` ${rightClicked ? 'clicked' : ''}`}></div>
-        </div>
+        <RiArrowLeftWideFill onMouseDown={handleLeftClick} className={`aIcon ${leftClicked ? 'clicked' : ''}`}/>
+          {videoList.map((_, index) => (
+            <div key={index} className={`pageTracker ${index + 1 == activeTracker ? 'current' : ''}`}></div>
+          ))}
+        <RiArrowLeftWideFill onMouseDown={handleRightClick} className={`bIcon ${rightClicked ? 'clicked' : ''}`}/>
       </div>
       </div>
     </div>
