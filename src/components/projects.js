@@ -1,12 +1,7 @@
 import './home.css';
 import { useRef, useState} from 'react';
 import { RiArrowLeftWideFill} from "react-icons/ri";
-import { RiPlayLargeFill } from "react-icons/ri";
 import { ImPlay2 } from "react-icons/im";
-import { MdOutlinePlayCircleFilled } from "react-icons/md";
-
-
-
 
 import api from '../assets/api.mp4';
 import bomberman from '../assets/bomberman.mp4';
@@ -38,6 +33,7 @@ function Projects() {
   setTimeout(() => setLoadArrowButtons(true), 1000)
 
   const handleLeftClick = () => {
+    if (Object.values(sliding).includes(true)) return
     setLeftClicked(true)
     setTimeout(() => setLeftClicked(false), 100)
 
@@ -102,6 +98,7 @@ function Projects() {
   }
 
   const handleRightClick = () => {
+    if (Object.values(sliding).includes(true)) return
     setRightClicked(true)
     setTimeout(() => setRightClicked(false), 100)
 
@@ -111,7 +108,7 @@ function Projects() {
     const zInd_1 = top.current.getAttribute('zindexswitch')
     const zInd_2 = top.current.getAttribute('zindexswitch2')
   
-    const newPage = page === videoList.length ? 1 : page + 1
+    const newPage = page == videoList.length ? 1 : page + 1
     setPage(newPage)
     if (page !== videoList.length) setActiveTracker(newPage)
       
@@ -149,8 +146,9 @@ function Projects() {
       ...prevState,
       [positionChoice]: true,
     }))
+    
+    videoPaused ? bot.current.pause() : bot.current.play()
 
-    videoPaused ? top.current.pause() : bot.current.play()
     setTimeout(() => {
       prevVideoRef.current.src = top.current.src
       newPage === videoList.length ? top.current.src = videoList[0] : top.current.src = videoList[newPage]
@@ -162,23 +160,25 @@ function Projects() {
     }, 700)
   }
 
-  const toggleVideoPlay = (videoRef) => {
-    setTimeout(() => {
-      if (!videoPaused) {
-        videoRef.current.pause()
-        setVideoPaused(true)
-      } else {
-        videoRef.current.play()
-        setVideoPaused(false)
-      }
-    },  0)
+  const toggleVideoPlay = () => {
+    if (Object.values(sliding).includes(true)) return
+
+    const videoRef = zIndex.current == 3 ? currentVideoRef : nextVideoRef
+    
+    if (!videoPaused) {
+      videoRef.current.pause()
+      setVideoPaused(true)
+    } else {
+      videoRef.current.play()
+      setVideoPaused(false)
+    }
   }
-  
-  //}, isSliding ? 700 : 0)
+
+
   return (
     <div className="App">
       <div className='contentContainer'>
-      <div className='videoContainer'>
+      <div className='videoContainer' onClick={toggleVideoPlay}>
         <video
             className='previousVideo'
             ref={prevVideoRef}
@@ -196,7 +196,6 @@ function Projects() {
             zindexswitch = "3"
             zindexswitch2 = "2"
             style={{ zIndex: zIndex.next }}
-            onClick={() => toggleVideoPlay(nextVideoRef)}
           />
         <video
           className={`currentVideo ${sliding.topRight ? 'slideRight' : ''}${sliding.topLeft ? 'slideLeft' : ''}`}
@@ -207,13 +206,10 @@ function Projects() {
           zindexswitch = "2"
           zindexswitch2 = "3"
           style={{ zIndex: zIndex.current }}
-          onClick={() => toggleVideoPlay(currentVideoRef)}
         />
-        <div onClick={toggleVideoPlay} className={`gifButton ${videoPaused ? '' : 'playing'}`}>
-          {/* <div className='playButton'></div> */}
+        <div  className={`gifButton ${videoPaused ? '' : 'playing'}`}>
+          <ImPlay2  className='play'/>
         </div>
-        <ImPlay2  className='play'/>
-
       </div>
       <div className="arrows">
         <RiArrowLeftWideFill onMouseDown={handleLeftClick} className={`aIcon ${leftClicked ? 'clicked' : ''}`}/>

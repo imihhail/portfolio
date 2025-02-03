@@ -8,16 +8,17 @@ import Models from "./components/models";
 function App() {
   return (
     <Router>
-      <NavBar />
-    
-        <Routes>
-          {/* <Route path="/registerpage" element={<RegisterPage />} /> */}
-          <Route path="/" element={<Projects />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/models" element={<Models />} />
-        </Routes>
- 
-    </Router>
+    {/* NavBar is now outside the container */}
+   
+    <div className="container">
+    <NavBar />
+      <Routes>
+        <Route path="/" element={<Projects />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/models" element={<Models />} />
+      </Routes>
+    </div>
+  </Router>
   );
 }
 

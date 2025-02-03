@@ -6,8 +6,12 @@ body {
   background: radial-gradient(circle at 50% 65%, #0b1316, #050505);
   background-size: cover;
   background-attachment: fixed;
-  font-family: 'Orbitron', sans-serif; 
+  font-family: 'Orbitron', sans-serif;
   text-shadow: 0px 0px 10px rgba(0, 195, 255, 0.8);
+
+    margin: 0;
+    padding: 0;
+
 }
 
 .App {
@@ -39,7 +43,6 @@ body {
   overflow: hidden;
   border: rgb(0, 195, 255) 3px solid;
   box-shadow: 0 0 20px rgb(0, 195, 255);
-  transition: box-shadow 0.5s ease-in-out;
 }
 
 .nextVideo, .previousVideo, .currentVideo {
@@ -50,6 +53,7 @@ body {
   height: 100%;
   object-fit: cover;
   cursor: pointer;
+  /* transition: 0.7s; */
 }
 
 @keyframes slideLeft {
@@ -113,42 +117,56 @@ body {
 
 .gifButton {
   background: rgb(4, 29, 46);
-  color: white;
-  font-size: 1.5vw;
-  font-weight: bold;
+  font-size: 2.0vw;
   border-radius: 50%;
-  width: 6vw;
-  aspect-ratio: 1 / 1;
   display: flex;
   justify-content: center;
   align-items: center;
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -50% ) scale(2.8);
   z-index: 3;
   opacity: 95%;
-  letter-spacing: 2px;
   cursor: pointer;
-  transition: 0.2s ease-in-out;
+  animation: fadeIn 0.2s  ease-in forwards;
+}
+
+.play {
+  color:rgb(0, 167, 218);
+  filter: drop-shadow(0px 0px 3px rgba(0, 156, 204, 0.8));
+  transform: scale(1.1);
 }
 
 .gifButton.playing {
-  display: none;
+  animation: fadeOut 0.7s  ease-out forwards;
 }
 
-.playButton {
-  border: calc(0.35 * 6vw) solid transparent;
-  border-radius: 5px;
-  border-left-color: rgb(0, 195, 255);
-  width: 0px;
-  height: 3px;
-  transform: scaleY(0.7) translateX(33%);
+@keyframes fadeOut {
+  0% {
+    
+  }
+
+  100% {
+    transform: translate(-50%, -50% ) scale(3);
+    opacity: 0;
+  }
+}
+
+@keyframes fadeIn {
+  0% {
+    transform: translate(-50%, -50% ) scale(2.6);
+    opacity: 0;
+  }
+
+  100% {
+    transform: translate(-50%, -50% ) scale(2.8);
+    opacity: 1;
+  }
 }
 
 .gifButton:hover {
-  transform: translate(-50%, -50%) scale(1.1);
-  box-shadow: 0 0 20px rgba(0, 195, 255, 0.8);
+
 }
 
 .aIcon, .bIcon {
@@ -179,24 +197,4 @@ body {
 
 .bIcon.clicked {
   transform: rotateX(50deg) rotateZ(180deg) scale(1.6) translateX(-5px);
-}
-
-.play {
-  width: 60px;
-  height: 90px;
-  color:rgb(0, 167, 218);
-  filter: drop-shadow(0px 0px 3px rgba(0, 156, 204, 0.8));
-  display: flex;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) scale(3.0) rotateX(0deg);
-  z-index: 3;
-  cursor: pointer;
-  transition: 0.2s ease-in-out;
-  
-}
-
-.play.playing {
-  display: none;
 }

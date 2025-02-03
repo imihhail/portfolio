@@ -1,37 +1,50 @@
 
 .navSection {
   display: flex;
-  justify-content: flex-end;
+  flex-direction: column;
+  align-self: flex-end;
   padding: 20px;
-  padding-right: 40px;
   background: transparent;
-  position: fixed;
-  width: 77%;
-  z-index: 1000;
+  /* Remove or comment out the following properties: */
+
+  
   box-sizing: border-box;
 }
 
-  .sectionsLinks {
-    font-size: 2rem;
-    display: flex;
-    gap: 40px;
-    text-decoration: none;
-  }
-  .sectionsLinks a {
-    text-decoration: none;
-    color: rgb(0, 195, 255); 
-    animation: neonGlow 20s infinite alternate;
 
+.sectionsLinks {
+  font-size: 2rem;
+  display: flex;
+  align-self:center;
+  gap: 40px;
+  text-decoration: none;
+}
 
+.sectionsLinks a {
+  text-decoration: none;
+  color: rgb(0, 195, 255); 
+  animation: neonGlow 20s infinite alternate;
 }
 
 .sectionsLinks a:hover {
-    color: #ff7b00;
-    
+  color: #ff7b00;
 }
 
+/* Your keyframes remain unchanged */
 @keyframes neonGlow {
   0% { text-shadow: 0 0 5px #0ff; }
   50% { text-shadow: 0 0 15px #0ff, 0 0 30px #00f; }
   100% { text-shadow: 0 0 5px #0ff; }
 }
+
+.sectionsLinks a:hover {
+    color: #ff7b00;
+}
+
+.nav-hr {
+  border: none;
+  border-bottom: 1px solid rgb(0, 195, 255);  /* Style your horizontal line */
+  margin: 0;
+  padding: 0;
+  margin-top: 10px;
+ }
