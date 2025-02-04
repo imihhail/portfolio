@@ -6,20 +6,39 @@
 .bottomLine {
     border: none;
     border-top: 1px solid rgb(1, 160, 209);
-    margin: 0;
 }
 
 .mediaIcons {
     display: flex;
+    gap: 40px;
+    justify-self: center;
+    padding: 0px;
+    padding-top: 10px;
+    padding-left: 40px;
+    width: 240px;
+    overflow: hidden;
+}
+
+.iconArray1, .iconArray2 {
+    display: flex;
     justify-content: center;
-    gap: 30px;
-    padding: 10px;
-    padding-bottom: 0px;
-    margin: 0;
+    gap: 40px;
+    width: 240px;
+    animation: moveLeft 15s infinite linear;
 }
 
 .icon {
     color: rgb(1, 160, 209);
     width: 30px;
     height: 30px;
+}
+
+@keyframes moveLeft {
+    0% {
+      transform: translateX(0);
+    }
+
+    100% {
+        transform: translateX(-280px);
+    }
 }
