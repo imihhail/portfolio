@@ -1,17 +1,28 @@
-.App {
+/* .App {
   text-align: center;
-}
+} */
 
 .container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   background: radial-gradient(circle at 50% 65%, #1c3138, #050505);
-  max-width: 1400px;
-  height: 100vh;
-  margin: 0px auto 0px;
-  padding: 0px; /* Increased top padding */
-  border-radius: 10px;
   background-color: #f9f9f9;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 8px rgba(3, 150, 248, 0.3);
+  width: 50%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 10px 10px;
+  border-radius: 10px;
   box-sizing: border-box;
+  height: 100vh;
+}
+
+@media (max-width: 600px) {
+  .container {
+    width: 100%;
+    padding: 10px;
+  }
 }
 
 

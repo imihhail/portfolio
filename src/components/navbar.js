@@ -11,9 +11,8 @@ export default function NavBar() {
           <Link to="/contact">Contact</Link>
           <Link to="/about">About</Link>
         </div>
-        <hr className="nav-hr" />
+          <div className="topLine"></div>
       </nav>
-      
     </>
   );
 }

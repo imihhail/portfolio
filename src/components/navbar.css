@@ -1,28 +1,36 @@
 
 .navSection {
-  display: flex;
-  flex-direction: column;
-  align-self: flex-end;
-  padding: 20px;
   background: transparent;
-  /* Remove or comment out the following properties: */
-
-  
   box-sizing: border-box;
+ 
 }
-
 
 .sectionsLinks {
   font-size: 2rem;
   display: flex;
-  align-self:center;
+  justify-self: end;
   gap: 40px;
   text-decoration: none;
+  padding: 0px 20px;
+}
+
+@media (max-width: 1920px) {
+  .sectionsLinks {
+    font-size: 1.6rem;
+    gap: 25px;
+  }
+}
+
+@media (max-width: 600px) {
+  .sectionsLinks {
+    font-size: 0.7rem;
+    gap: 10px;
+  }
 }
 
 .sectionsLinks a {
   text-decoration: none;
-  color: rgb(0, 195, 255); 
+  color: rgb(0, 195, 255);
   animation: neonGlow 20s infinite alternate;
 }
 
@@ -30,21 +38,14 @@
   color: #ff7b00;
 }
 
-/* Your keyframes remain unchanged */
 @keyframes neonGlow {
   0% { text-shadow: 0 0 5px #0ff; }
   50% { text-shadow: 0 0 15px #0ff, 0 0 30px #00f; }
   100% { text-shadow: 0 0 5px #0ff; }
 }
 
-.sectionsLinks a:hover {
-    color: #ff7b00;
-}
-
-.nav-hr {
+.topLine {
   border: none;
-  border-bottom: 1px solid rgb(0, 195, 255);  /* Style your horizontal line */
-  margin: 0;
-  padding: 0;
-  margin-top: 10px;
- }
+  border-bottom: 1px solid rgb(1, 160, 209);
+  margin-top: 20px;
+}

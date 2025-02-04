@@ -1,0 +1,25 @@
+.footerSection {
+    padding: 0;
+    margin: 0;
+}
+
+.bottomLine {
+    border: none;
+    border-top: 1px solid rgb(1, 160, 209);
+    margin: 0;
+}
+
+.mediaIcons {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    padding: 10px;
+    padding-bottom: 0px;
+    margin: 0;
+}
+
+.icon {
+    color: rgb(1, 160, 209);
+    width: 30px;
+    height: 30px;
+}

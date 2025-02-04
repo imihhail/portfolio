@@ -177,7 +177,6 @@ function Projects() {
 
   return (
     <div className="App">
-      <div className='contentContainer'>
       <div className='videoContainer' onClick={toggleVideoPlay}>
         <video
             className='previousVideo'
@@ -217,7 +216,6 @@ function Projects() {
             <div key={index} className={`pageTracker ${index + 1 == activeTracker ? 'current' : ''}`}></div>
           ))}
         <RiArrowLeftWideFill onMouseDown={handleRightClick} className={`bIcon ${rightClicked ? 'clicked' : ''}`}/>
-      </div>
       </div>
     </div>
   )
