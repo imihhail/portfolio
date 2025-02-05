@@ -1,5 +1,5 @@
 import './home.css';
-import { useRef, useState} from 'react';
+import { useRef, useState, useEffect} from 'react';
 import { RiArrowLeftWideFill} from "react-icons/ri";
 import { ImPlay2 } from "react-icons/im";
 
@@ -14,7 +14,6 @@ function Projects() {
   const videoList = [api, messenger, tetris, bomberman, snetwork];
   const [leftClicked, setLeftClicked] = useState(false);
   const [rightClicked, setRightClicked] = useState(false);
-  const [loadArrowButtons, setLoadArrowButtons] = useState(false);
   const currentVideoRef = useRef(null);
   const nextVideoRef = useRef(null);
   const prevVideoRef = useRef(null);
@@ -28,9 +27,31 @@ function Projects() {
   const [page, setPage] = useState(1);
   const [activeTracker, setActiveTracker] = useState(1);
   const [zIndex, setZIndex] = useState({ current: 3, next: 2, prev: 1 })
+  const [videoText, setVideoText] = useState({
+    firstVid: "First video description",
+  });
+  const [currentText, setCurrentText] = useState("");
 
+  function loopText() {
+    let i = 0
 
-  setTimeout(() => setLoadArrowButtons(true), 1000)
+    function letterInterval() {
+      if (i < videoText.firstVid.length - 1) {
+        setCurrentText(prev => prev + videoText.firstVid[i])
+      }
+      i++
+
+      if (i == videoText.firstVid.length - 1) {
+        clearInterval(removeLetterInterval)
+      }
+    }
+    const removeLetterInterval = setInterval(letterInterval, 80)
+  }
+
+  useEffect(() => {
+    loopText()
+  }, []);
+
 
   const handleLeftClick = () => {
     if (Object.values(sliding).includes(true)) return
@@ -209,7 +230,11 @@ function Projects() {
         <div  className={`gifButton ${videoPaused ? '' : 'playing'}`}>
           <ImPlay2  className='play'/>
         </div>
+        <div className="videoText">
+          {currentText}
+        </div>
       </div>
+
       <div className="arrows">
         <RiArrowLeftWideFill onMouseDown={handleLeftClick} className={`aIcon ${leftClicked ? 'clicked' : ''}`}/>
           {videoList.map((_, index) => (

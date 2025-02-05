@@ -2,7 +2,7 @@
 .navSection {
   background: transparent;
   box-sizing: border-box;
- 
+  overflow: hidden;
 }
 
 .sectionsLinks {
@@ -31,21 +31,53 @@
 .sectionsLinks a {
   text-decoration: none;
   color: rgb(0, 195, 255);
-  animation: neonGlow 20s infinite alternate;
+  /* text-shadow: 0 0 15px #0ff, 0 0 30px #00f; */
 }
 
 .sectionsLinks a:hover {
   color: #ff7b00;
 }
 
-@keyframes neonGlow {
-  0% { text-shadow: 0 0 5px #0ff; }
-  50% { text-shadow: 0 0 15px #0ff, 0 0 30px #00f; }
-  100% { text-shadow: 0 0 5px #0ff; }
-}
-
 .topLine {
   border: none;
   border-bottom: 1px solid rgb(1, 160, 209);
   margin-top: 20px;
+}
+
+.topLineShining {
+  border: none;
+  background: rgb(0, 204, 255) ;
+  height: 4px;
+  width: 20%;
+  box-shadow: 0px 0 20px rgb(0, 255, 242);
+  transform: translateX(-120%);
+}
+
+.topLineShining.zap {
+  animation: shineRight 1s linear;
+}
+
+@keyframes shineRight {
+  0% {
+    transform: translateX(0) translateY(6px);
+  }
+
+  100% {
+    transform: translateX(1000%) translateY(6px);
+  }
+}
+
+.flicker1, .flicker2, .flicker3 {
+  animation: flicker 0.5s linear;
+}
+
+@keyframes flicker {
+  0% {opacity: 0;}
+  10% {opacity: 1;}
+  20% {opacity: 0;}
+  40% {opacity: 1;}
+  50% {opacity: 0;}
+  60% {opacity: 1;}
+  80% {opacity: 0;}
+  100% {opacity: 1;}
 }
