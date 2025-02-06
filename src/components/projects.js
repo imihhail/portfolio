@@ -36,48 +36,53 @@ function Projects() {
   const [zIndex, setZIndex] = useState({ current: 3, next: 2, prev: 1 })
   const [projectText, setProjectText] = useState("");
   const [projectText2, setProjectText2] = useState("");
-  
-  function loopText(text, line) {
-    let i = -1
+  const loopTextIntervals = useRef({});
+
+  function typeText(text, line) {
+    let i = -1;
     function letterInterval() {
-      i++
-      if (i < text.length) {
-        if (line == 0) {
-          setProjectText(prev => prev + text[i])
+      i++;
+      if (i < text.length && loopTextIntervals.current[line]) {
+        if (line === 0) {
+          setProjectText(prev => prev + text[i]);
         } else {
-          setProjectText2(prev => prev + text[i])
+          setProjectText2(prev => prev + text[i]);
         }
-      }
-      if (i === text.length) {
-        clearInterval(removeLetterInterval)
+      } else {
+        clearInterval(loopTextIntervals.current[line]);
+        delete loopTextIntervals.current[line];
       }
     }
-    const removeLetterInterval = setInterval(letterInterval, 80)
+    loopTextIntervals.current[line] = setInterval(letterInterval, 80);
   }
 
   function removeText(text, line) {
-    const removeSpeed = 700 / text.length
-    const setText = line === 0 ? setProjectText : setProjectText2
-  
+    const removeSpeed = 700 / text.length;
+    const setText = line === 0 ? setProjectText : setProjectText2;
+
     const removeInterval = setInterval(() => {
       setText(prev => {
         if (prev.length === 0) {
-          clearInterval(removeInterval)
-          if (line == 1) {
-            loopText(videoList[page - 1].info[0], 0)
-            loopText(videoList[page - 1].info[1], 1)
+          clearInterval(removeInterval);
+          if (line === 1) {
+            typeText(videoList[page - 1].info[0], 0);
+            typeText(videoList[page - 1].info[1], 1);
           }
-          return ""
+          return "";
         }
-        return prev.slice(0, -1)
-      })
-    }, removeSpeed)
+        return prev.slice(0, -1);
+      });
+    }, removeSpeed);
   }
 
-  useEffect(() => {
-    removeText(projectText, 0)
-    removeText(projectText2, 1)
-  },[page])
+  useEffect(() => {    
+    Object.values(loopTextIntervals.current).forEach(intervalId => {
+      clearInterval(intervalId);
+    })
+   // loopTextIntervals.current = {};
+      removeText(projectText, 0);
+      removeText(projectText2, 1);
+  }, [page]);
 
   const handleLeftClick = () => {
     if (Object.values(sliding).includes(true)) return
@@ -148,6 +153,7 @@ function Projects() {
     if (Object.values(sliding).includes(true)) return
     setRightClicked(true)
     setTimeout(() => setRightClicked(false), 100)
+
 
     const [top, bot] =
     zIndex.current == 3 ? [currentVideoRef, nextVideoRef] : [nextVideoRef, currentVideoRef]
