@@ -11,7 +11,14 @@ import messenger from '../assets/messenger.mp4';
 
 
 function Projects() {
-  const videoList = [api, messenger, tetris, bomberman, snetwork];
+  const videoList = [
+    { project: api, info: ["Project: GO-API", "Languages: GO, HTML, CSS"] },
+    { project: messenger, info: ["Project: Forum-chat", "Languages: GO, JavaScript"] },
+    { project: tetris, info: ["Project: Tetris", "Languages: GO, JavaScript"] },
+    { project: bomberman, info:["Project: Bomberman-live", "Languages: GO, JavaScript, React"] },
+    { project: snetwork, info: ["Project: Social gameNetwork", "Languages: GO, JavaScript, React"] }
+  ];
+
   const [leftClicked, setLeftClicked] = useState(false);
   const [rightClicked, setRightClicked] = useState(false);
   const currentVideoRef = useRef(null);
@@ -27,31 +34,50 @@ function Projects() {
   const [page, setPage] = useState(1);
   const [activeTracker, setActiveTracker] = useState(1);
   const [zIndex, setZIndex] = useState({ current: 3, next: 2, prev: 1 })
-  const [videoText, setVideoText] = useState({
-    firstVid: "First video description",
-  });
-  const [currentText, setCurrentText] = useState("");
-
-  function loopText() {
-    let i = 0
-
+  const [projectText, setProjectText] = useState("");
+  const [projectText2, setProjectText2] = useState("");
+  
+  function loopText(text, line) {
+    let i = -1
     function letterInterval() {
-      if (i < videoText.firstVid.length - 1) {
-        setCurrentText(prev => prev + videoText.firstVid[i])
-      }
       i++
-
-      if (i == videoText.firstVid.length - 1) {
+      if (i < text.length) {
+        if (line == 0) {
+          setProjectText(prev => prev + text[i])
+        } else {
+          setProjectText2(prev => prev + text[i])
+        }
+      }
+      if (i === text.length) {
         clearInterval(removeLetterInterval)
       }
     }
     const removeLetterInterval = setInterval(letterInterval, 80)
   }
 
-  useEffect(() => {
-    loopText()
-  }, []);
+  function removeText(text, line) {
+    const removeSpeed = 700 / text.length
+    const setText = line === 0 ? setProjectText : setProjectText2
+  
+    const removeInterval = setInterval(() => {
+      setText(prev => {
+        if (prev.length === 0) {
+          clearInterval(removeInterval)
+          if (line == 1) {
+            loopText(videoList[page - 1].info[0], 0)
+            loopText(videoList[page - 1].info[1], 1)
+          }
+          return ""
+        }
+        return prev.slice(0, -1)
+      })
+    }, removeSpeed)
+  }
 
+  useEffect(() => {
+    removeText(projectText, 0)
+    removeText(projectText2, 1)
+  },[page])
 
   const handleLeftClick = () => {
     if (Object.values(sliding).includes(true)) return
@@ -77,15 +103,15 @@ function Projects() {
         ...prevState,
         [positionChoice]: true
       }))
-        setTimeout(() => {
-          newPage == 1 ? prevVideoRef.current.src = videoList[videoList.length-1]
-          : prevVideoRef.current.src = videoList[lowerVid]
-          setZIndex({ current: zInd_1, next: zInd_2 })
-          setSliding(prevState => ({
-            ...prevState,
-            [positionChoice]: false,
-          }))
-        }, 700)
+      setTimeout(() => {
+        newPage == 1 ? prevVideoRef.current.src = videoList[videoList.length-1].project
+        : prevVideoRef.current.src = videoList[lowerVid].project
+        setZIndex({ current: zInd_1, next: zInd_2 })
+        setSliding(prevState => ({
+          ...prevState,
+          [positionChoice]: false,
+        }))
+      }, 700)
 
     // PageTracker reverse animation when current page is first page
     if (activeTracker == 1) {
@@ -117,7 +143,7 @@ function Projects() {
       }, 180)
     }
   }
-
+  
   const handleRightClick = () => {
     if (Object.values(sliding).includes(true)) return
     setRightClicked(true)
@@ -172,7 +198,7 @@ function Projects() {
 
     setTimeout(() => {
       prevVideoRef.current.src = top.current.src
-      newPage === videoList.length ? top.current.src = videoList[0] : top.current.src = videoList[newPage]
+      newPage === videoList.length ? top.current.src = videoList[0].project : top.current.src = videoList[newPage].project
       setZIndex({ current: zInd_1, next: zInd_2 })
       setSliding(prevState => ({
         ...prevState,
@@ -202,7 +228,7 @@ function Projects() {
         <video
             className='previousVideo'
             ref={prevVideoRef}
-            src={videoList[videoList.length-1]}
+            src={videoList[videoList.length - 1].project}
             loop
             muted
             style={{ zIndex: zIndex.prev }}
@@ -210,7 +236,7 @@ function Projects() {
         <video
             className={`nextVideo ${sliding.botRight ? 'slideRight' : ''}${sliding.botLeft ? 'slideLeft' : ''}`}
             ref={nextVideoRef}
-            src={videoList[1]}
+            src={videoList[1].project}
             loop
             muted
             zindexswitch = "3"
@@ -220,26 +246,31 @@ function Projects() {
         <video
           className={`currentVideo ${sliding.topRight ? 'slideRight' : ''}${sliding.topLeft ? 'slideLeft' : ''}`}
           ref={currentVideoRef}
-          src={videoList[0]}
+          src={videoList[0].project}
           loop
           muted
           zindexswitch = "2"
           zindexswitch2 = "3"
           style={{ zIndex: zIndex.current }}
         />
-        <div  className={`gifButton ${videoPaused ? '' : 'playing'}`}>
-          <ImPlay2  className='play'/>
+        <div className={`gifButton ${videoPaused ? '' : 'playing'}`}>
+          <ImPlay2 className='play'/>
         </div>
         <div className="videoText">
-          {currentText}
+          <strong>{projectText.slice(0, 8)}</strong>{projectText.slice(8)}
+            <br />
+          <strong>{projectText2.slice(0, 10)}</strong>{projectText2.slice(10)}
         </div>
       </div>
 
       <div className="arrows">
         <RiArrowLeftWideFill onMouseDown={handleLeftClick} className={`aIcon ${leftClicked ? 'clicked' : ''}`}/>
-          {videoList.map((_, index) => (
-            <div key={index} className={`pageTracker ${index + 1 == activeTracker ? 'current' : ''}`}></div>
-          ))}
+        {videoList.map((key, index) => (
+          <div
+            key={index}
+            className={`pageTracker ${index + 1 === activeTracker ? 'current' : ''}`}
+          ></div>
+        ))}
         <RiArrowLeftWideFill onMouseDown={handleRightClick} className={`bIcon ${rightClicked ? 'clicked' : ''}`}/>
       </div>
     </div>
