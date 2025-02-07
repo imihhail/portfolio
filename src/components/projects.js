@@ -17,20 +17,14 @@ function Projects() {
     { project: tetris, info: ["Project: Tetris", "Languages: GO, JavaScript"] },
     { project: bomberman, info:["Project: Bomberman-live", "Languages: GO, JavaScript, React"] },
     { project: snetwork, info: ["Project: Social gameNetwork", "Languages: GO, JavaScript, React"] }
-  ];
-
-  const videoInfoList =[{ project: "Project: GO-API", lang:"Languages: GO, HTML, CSS" },
-                        { project: "Project: Forum-chat", lang:"Languages: GO, JavaScript" },
-                        { project: "Project: Tetris", lang:"Languages: GO, JavaScript" },
-                        { project: "Project: Bomberman-live", lang:"Languages: GO, JavaScript, React" },
-                        { project: "Project: Social gameNetwork", lang:"Languages: GO, JavaScript, React" }]
-  
+  ]
 
   const [leftClicked, setLeftClicked] = useState(false);
   const [rightClicked, setRightClicked] = useState(false);
   const currentVideoRef = useRef(null);
   const nextVideoRef = useRef(null);
   const prevVideoRef = useRef(null);
+  const [initialLoad, setInitialLoad] = useState(true);
   const [sliding, setSliding] = useState({
     topRight: false,
     botRight: false,
@@ -44,23 +38,25 @@ function Projects() {
   const [projectText, setProjectText] = useState("");
   const [projectText2, setProjectText2] = useState("");
   const loopTextIntervals = useRef({});
+  const [videosLoading, setVideosLoading] = useState(false);
 
   function typeText(text, line) {
-    let i = -1;
+    let i = -1
+
     function letterInterval() {
-      i++;
+      i++
       if (i < text.length && loopTextIntervals.current[line]) {
         if (line === 0) {
-          setProjectText(prev => prev + text[i]);
+          setProjectText(prev => prev + text[i])
         } else {
-          setProjectText2(prev => prev + text[i]);
+          setProjectText2(prev => prev + text[i])
         }
       } else {
-        clearInterval(loopTextIntervals.current[line]);
-        delete loopTextIntervals.current[line];
+        clearInterval(loopTextIntervals.current[line])
+        delete loopTextIntervals.current[line]
       }
     }
-    loopTextIntervals.current[line] = setInterval(letterInterval, 80);
+    loopTextIntervals.current[line] = setInterval(letterInterval, 80)
   }
 
   function removeText(text, line) {
@@ -83,13 +79,16 @@ function Projects() {
   }
 
   useEffect(() => {
-    Object.values(loopTextIntervals.current).forEach(intervalId => {
-      clearInterval(intervalId);
-    })
-   // loopTextIntervals.current = {};
+    if (!initialLoad) {
+      Object.values(loopTextIntervals.current).forEach(intervalId => {
+        clearInterval(intervalId);
+      });
+      // loopTextIntervals.current = {};
       removeText(projectText, 0);
       removeText(projectText2, 1);
-  }, [page]);
+    }
+  }, [page, initialLoad]);
+  
 
   const handleLeftClick = () => {
     if (Object.values(sliding).includes(true)) return
@@ -207,10 +206,11 @@ function Projects() {
     }))
     
     videoPaused ? bot.current.pause() : bot.current.play()
-
+    
     setTimeout(() => {
       prevVideoRef.current.src = top.current.src
-      newPage === videoList.length ? top.current.src = videoList[0].project : top.current.src = videoList[newPage].project
+      const nextVideo = newPage === videoList.length ? videoList[0].project : videoList[newPage].project
+      top.current.src = nextVideo
       setZIndex({ current: zInd_1, next: zInd_2 })
       setSliding(prevState => ({
         ...prevState,
@@ -233,28 +233,21 @@ function Projects() {
     }
   }
 
+  const handleVideoLoadStart = () => {
+    if (initialLoad) setVideosLoading(true)
+  }
+
+  const handleVideoLoad = () => {
+    if (initialLoad) {
+      setVideosLoading(false);
+      setInitialLoad(false);
+    }
+  }
 
   return (
-    <div className="App">
+    <div className="App" >
       <div className='videoContainer' onClick={toggleVideoPlay}>
-        <video
-            className='previousVideo'
-            ref={prevVideoRef}
-            src={videoList[videoList.length - 1].project}
-            loop
-            muted
-            style={{ zIndex: zIndex.prev }}
-          />
-        <video
-            className={`nextVideo ${sliding.botRight ? 'slideRight' : ''}${sliding.botLeft ? 'slideLeft' : ''}`}
-            ref={nextVideoRef}
-            src={videoList[1].project}
-            loop
-            muted
-            zindexswitch = "3"
-            zindexswitch2 = "2"
-            style={{ zIndex: zIndex.next }}
-          />
+        {videosLoading &&(<div class="loader"></div>)}
         <video
           className={`currentVideo ${sliding.topRight ? 'slideRight' : ''}${sliding.topLeft ? 'slideLeft' : ''}`}
           ref={currentVideoRef}
@@ -264,15 +257,39 @@ function Projects() {
           zindexswitch = "2"
           zindexswitch2 = "3"
           style={{ zIndex: zIndex.current }}
+          onLoadStart={handleVideoLoadStart}
+          onLoadedData={handleVideoLoad}
         />
-        <div className={`gifButton ${videoPaused ? '' : 'playing'}`}>
-          <ImPlay2 className='play'/>
-        </div>
-        <div className="videoText">
-          <strong>{projectText.slice(0, 8)}</strong>{projectText.slice(8)}
+      {!videosLoading && (
+        <>
+          <video
+            className='previousVideo'
+            ref={prevVideoRef}
+            src={videoList[videoList.length - 1].project}
+            loop
+            muted
+            style={{ zIndex: zIndex.prev }}
+          />
+          <video
+            className={`nextVideo ${sliding.botRight ? 'slideRight' : ''}${sliding.botLeft ? 'slideLeft' : ''}`}
+            ref={nextVideoRef}
+            src={videoList[1].project}
+            loop
+            muted
+            zindexswitch = "3"
+            zindexswitch2 = "2"
+            style={{ zIndex: zIndex.next }}
+          />
+          <div className="videoText">
+            <strong>{projectText.slice(0, 8)}</strong>{projectText.slice(8)}
             <br />
-          <strong>{projectText2.slice(0, 10)}</strong>{projectText2.slice(10)}
-        </div>
+            <strong>{projectText2.slice(0, 10)}</strong>{projectText2.slice(10)}
+          </div>
+          <div className={`gifButton ${videoPaused ? '' : 'playing'}`}>
+            <ImPlay2 className='play' />
+          </div>
+        </>
+      )}
       </div>
 
       <div className="arrows">
