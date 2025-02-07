@@ -19,6 +19,13 @@ function Projects() {
     { project: snetwork, info: ["Project: Social gameNetwork", "Languages: GO, JavaScript, React"] }
   ];
 
+  const videoInfoList =[{ project: "Project: GO-API", lang:"Languages: GO, HTML, CSS" },
+                        { project: "Project: Forum-chat", lang:"Languages: GO, JavaScript" },
+                        { project: "Project: Tetris", lang:"Languages: GO, JavaScript" },
+                        { project: "Project: Bomberman-live", lang:"Languages: GO, JavaScript, React" },
+                        { project: "Project: Social gameNetwork", lang:"Languages: GO, JavaScript, React" }]
+  
+
   const [leftClicked, setLeftClicked] = useState(false);
   const [rightClicked, setRightClicked] = useState(false);
   const currentVideoRef = useRef(null);
@@ -75,7 +82,7 @@ function Projects() {
     }, removeSpeed);
   }
 
-  useEffect(() => {    
+  useEffect(() => {
     Object.values(loopTextIntervals.current).forEach(intervalId => {
       clearInterval(intervalId);
     })
