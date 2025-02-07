@@ -154,7 +154,6 @@ function Projects() {
     setRightClicked(true)
     setTimeout(() => setRightClicked(false), 100)
 
-
     const [top, bot] =
     zIndex.current == 3 ? [currentVideoRef, nextVideoRef] : [nextVideoRef, currentVideoRef]
     const positionChoice = zIndex.current == 3 ? 'topLeft' : 'botLeft'

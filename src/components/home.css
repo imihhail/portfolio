@@ -21,33 +21,22 @@ body {
 }
 
 .videoContainer {
-  border-radius: 10px;
+  border-radius: 20px;
   position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
   margin: auto;
   width: 100%;
-  padding-top: 56.25%; /* 16:9 aspect ratio */
+  aspect-ratio: 16 / 9;
   overflow: hidden;
   border: rgba(0, 195, 255, 0.548) 1px solid;
   box-shadow: 0 0 20px rgba(0, 195, 255, 0.37);
 }
 
-.videoText {
-  position: absolute;
-  bottom: 10px;
-  left: 10px;
-  color: rgb(0, 195, 255);
-  font-size: 1.5rem;
-  /* font-weight: bold; */
-  z-index: 5;
-  background: rgba(0, 0, 0, 0.678);
-  padding: 5px 10px;
-  border-radius: 3px;
-}
-
 .nextVideo, .previousVideo, .currentVideo {
+  border-radius: 20px;
+  display: block;
   position: absolute;
   top: 0;
   left: 0;
@@ -58,23 +47,13 @@ body {
 }
 
 @keyframes slideLeft {
-  0% {
-    transform: translateX(0);
-  }
-
-  100% {
-    transform: translateX(-100%);
-  }
+  0% {transform: translateX(0)}
+  100% {transform: translateX(-100%)}
 }
 
 @keyframes slideRight {
-  0% {
-    transform: translateX(0);
-  }
-
-  100% {
-    transform: translateX(100%);
-  }
+  0% {transform: translateX(0)}
+  100% {transform: translateX(100%)}
 }
 
 .currentVideo.slideLeft {
@@ -91,6 +70,18 @@ body {
 
 .nextVideo.slideRight {
   animation: slideRight 0.7s  ease-out forwards;
+}
+
+.videoText {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  color: rgb(0, 195, 255);
+  font-size: 1.5rem;
+  z-index: 5;
+  background: rgba(0, 0, 0, 0.678);
+  padding: 5px 10px;
+  border-radius: 3px;
 }
 
 .arrows {
