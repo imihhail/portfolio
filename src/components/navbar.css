@@ -35,7 +35,8 @@
 }
 
 .sectionsLinks a:hover {
-  color: #ff7b00;
+    color: #ff7b00;
+   /* text-shadow: 0 0 15px #0ff, 0 0 30px #00f; */
 }
 
 .topLine {

@@ -39,6 +39,9 @@ function Projects() {
   const [projectText2, setProjectText2] = useState("");
   const loopTextIntervals = useRef({});
   const [videosLoading, setVideosLoading] = useState(false);
+  const [nextVideLoading, setNextVideLoading] = useState(false);
+  const [playSpinner, setPlaySpinner] = useState(false);
+  let expectedVideo = useRef(null);
 
   function typeText(text, line) {
     let i = -1
@@ -156,7 +159,7 @@ function Projects() {
   }
   
   const handleRightClick = () => {
-    if (Object.values(sliding).includes(true)) return
+    if (Object.values(sliding).includes(true) || playSpinner) return
     setRightClicked(true)
     setTimeout(() => setRightClicked(false), 100)
 
@@ -165,7 +168,13 @@ function Projects() {
     const positionChoice = zIndex.current == 3 ? 'topLeft' : 'botLeft'
     const zInd_1 = top.current.getAttribute('zindexswitch')
     const zInd_2 = top.current.getAttribute('zindexswitch2')
-  
+    bot.current.style.display = "block";
+
+    if (nextVideLoading) {
+      expectedVideo.current = bot.current
+      setPlaySpinner(true)
+    }
+    
     const newPage = page == videoList.length ? 1 : page + 1
     setPage(newPage)
     if (page !== videoList.length) setActiveTracker(newPage)
@@ -216,6 +225,9 @@ function Projects() {
         ...prevState,
         [positionChoice]: false,
       }))
+      if (top.current) {
+        top.current.style.display = "none";
+      }
     }, 700)
   }
 
@@ -244,10 +256,31 @@ function Projects() {
     }
   }
 
+  const handlePreloadStart = () => {
+    if (!initialLoad) {
+      setNextVideLoading(true);
+    }
+  }
+  
+  const handlePreloadFinish = (vid) => {
+    if (!initialLoad) {
+      if (expectedVideo.current == vid.current) {
+        setPlaySpinner(false)
+      }
+      setNextVideLoading(false)
+    }
+  }
+
+
   return (
     <div className="App" >
       <div className='videoContainer' onClick={toggleVideoPlay}>
-        {videosLoading &&(<div class="loader"></div>)}
+        {(videosLoading) && (
+          <div className="loader"></div>
+        )}
+        {(playSpinner) && (
+          <div className="loader2"></div>
+        )}
         <video
           className={`currentVideo ${sliding.topRight ? 'slideRight' : ''}${sliding.topLeft ? 'slideLeft' : ''}`}
           ref={currentVideoRef}
@@ -257,39 +290,51 @@ function Projects() {
           zindexswitch = "2"
           zindexswitch2 = "3"
           style={{ zIndex: zIndex.current }}
-          onLoadStart={handleVideoLoadStart}
-          onLoadedData={handleVideoLoad}
+          onLoadStart={() => {
+            handleVideoLoadStart()
+            handlePreloadStart(currentVideoRef)
+          }}
+          onLoadedData={() => {
+            handleVideoLoad()
+            handlePreloadFinish(currentVideoRef)
+          }}
         />
-      {!videosLoading && (
-        <>
-          <video
-            className='previousVideo'
-            ref={prevVideoRef}
-            src={videoList[videoList.length - 1].project}
-            loop
-            muted
-            style={{ zIndex: zIndex.prev }}
-          />
-          <video
-            className={`nextVideo ${sliding.botRight ? 'slideRight' : ''}${sliding.botLeft ? 'slideLeft' : ''}`}
-            ref={nextVideoRef}
-            src={videoList[1].project}
-            loop
-            muted
-            zindexswitch = "3"
-            zindexswitch2 = "2"
-            style={{ zIndex: zIndex.next }}
-          />
-          <div className="videoText">
-            <strong>{projectText.slice(0, 8)}</strong>{projectText.slice(8)}
-            <br />
-            <strong>{projectText2.slice(0, 10)}</strong>{projectText2.slice(10)}
-          </div>
-          <div className={`gifButton ${videoPaused ? '' : 'playing'}`}>
-            <ImPlay2 className='play' />
-          </div>
-        </>
-      )}
+        {!videosLoading && (
+          <>
+            <video
+              className='previousVideo'
+              ref={prevVideoRef}
+              src={videoList[videoList.length - 1].project}
+              loop
+              muted
+              style={{ zIndex: zIndex.prev }}
+            />
+            <video
+              className={`nextVideo ${sliding.botRight ? 'slideRight' : ''}${sliding.botLeft ? 'slideLeft' : ''}`}
+              ref={nextVideoRef}
+              src={videoList[1].project}
+              loop
+              muted
+              zindexswitch = "3"
+              zindexswitch2 = "2"
+              style={{ zIndex: zIndex.next }}
+              onLoadStart={() => {handlePreloadStart(nextVideoRef)}}
+              onLoadedData={() => {handlePreloadFinish(nextVideoRef)}}
+            />
+            {!playSpinner && (
+              <>
+                <div className="videoText">
+                  <strong>{projectText.slice(0, 8)}</strong>{projectText.slice(8)}
+                    <br />
+                  <strong>{projectText2.slice(0, 10)}</strong>{projectText2.slice(10)}
+                </div>
+                <div className={`gifButton ${videoPaused ? '' : 'playing'}`}>
+                  <ImPlay2 className='play' />
+                </div>
+              </>
+            )}
+          </>
+        )}
       </div>
 
       <div className="arrows">
