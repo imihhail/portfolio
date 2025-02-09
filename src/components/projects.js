@@ -42,6 +42,8 @@ function Projects() {
   const [nextVideLoading, setNextVideLoading] = useState(false);
   const [playSpinner, setPlaySpinner] = useState(false);
   let expectedVideo = useRef(null);
+  const [isVideoLoaded, setIsVideoLoaded] = useState(false);
+  const [isAnimationEnded, setIsAnimationEnded] = useState(false);
 
   function typeText(text, line) {
     let i = -1
@@ -63,32 +65,34 @@ function Projects() {
   }
 
   function removeText(text, line) {
-    const removeSpeed = 700 / text.length;
+    const removeSpeed = 700 / text.length
     const setText = line === 0 ? setProjectText : setProjectText2;
 
     const removeInterval = setInterval(() => {
       setText(prev => {
         if (prev.length === 0) {
           clearInterval(removeInterval);
-          if (line === 1) {
-            typeText(videoList[page - 1].info[0], 0);
-            typeText(videoList[page - 1].info[1], 1);
+          if (line === 1 ) {
+            if (!playSpinner) {
+              // typeText(videoList[page - 1].info[0], 0);
+              // typeText(videoList[page - 1].info[1], 1);
+            }
           }
           return "";
         }
         return prev.slice(0, -1);
       });
-    }, removeSpeed);
+    }, removeSpeed)
   }
 
   useEffect(() => {
     if (!initialLoad) {
-      Object.values(loopTextIntervals.current).forEach(intervalId => {
-        clearInterval(intervalId);
-      });
-      // loopTextIntervals.current = {};
-      removeText(projectText, 0);
-      removeText(projectText2, 1);
+        Object.values(loopTextIntervals.current).forEach(intervalId => {
+          clearInterval(intervalId);
+        })
+        // loopTextIntervals.current = {};
+        removeText(projectText, 0);
+        removeText(projectText2, 1);
     }
   }, [page, initialLoad]);
   
@@ -159,7 +163,7 @@ function Projects() {
   }
   
   const handleRightClick = () => {
-    if (Object.values(sliding).includes(true) || playSpinner) return
+    if (Object.values(sliding).includes(true) || playSpinner ) return
     setRightClicked(true)
     setTimeout(() => setRightClicked(false), 100)
 
@@ -228,7 +232,7 @@ function Projects() {
       if (top.current) {
         top.current.style.display = "none";
       }
-    }, 700)
+    }, 800)
   }
 
   const toggleVideoPlay = () => {
@@ -262,14 +266,33 @@ function Projects() {
     }
   }
   
-  const handlePreloadFinish = (vid) => {
+  const handlePreloadFinish = (vid, zIndex) => {
     if (!initialLoad) {
-      if (expectedVideo.current == vid.current) {
+      console.log("zindex: ", zIndex);
+      
+      if (expectedVideo.current == vid.current && zIndex == 3) {
         setPlaySpinner(false)
+        // typeText(videoList[page - 1].info[0], 0);
+        // typeText(videoList[page - 1].info[1], 1);
       }
+      console.log("preloadfinsh");
+      
       setNextVideLoading(false)
+      setIsVideoLoaded(true)
     }
   }
+
+  const handleAnimationEnd = () => {
+    console.log("Animation ended");
+    setIsAnimationEnded(true);
+  };
+
+  useEffect(() => {
+    if (isVideoLoaded && isAnimationEnded) {
+      console.log("Both onLoadedData and onAnimationEnd are complete!");
+      // Do something here...
+    }
+  }, [isVideoLoaded, isAnimationEnded]);
 
 
   return (
@@ -296,8 +319,9 @@ function Projects() {
           }}
           onLoadedData={() => {
             handleVideoLoad()
-            handlePreloadFinish(currentVideoRef)
+            handlePreloadFinish(currentVideoRef, zIndex.current)
           }}
+          onAnimationEnd={handleAnimationEnd}
         />
         {!videosLoading && (
           <>
@@ -308,6 +332,7 @@ function Projects() {
               loop
               muted
               style={{ zIndex: zIndex.prev }}
+              onAnimationEnd={handleAnimationEnd}
             />
             <video
               className={`nextVideo ${sliding.botRight ? 'slideRight' : ''}${sliding.botLeft ? 'slideLeft' : ''}`}
@@ -319,20 +344,22 @@ function Projects() {
               zindexswitch2 = "2"
               style={{ zIndex: zIndex.next }}
               onLoadStart={() => {handlePreloadStart(nextVideoRef)}}
-              onLoadedData={() => {handlePreloadFinish(nextVideoRef)}}
+              onLoadedData={() => {handlePreloadFinish(nextVideoRef, zIndex.next)}}
+              onAnimationEnd={handleAnimationEnd}
             />
             {!playSpinner && (
               <>
-                <div className="videoText">
-                  <strong>{projectText.slice(0, 8)}</strong>{projectText.slice(8)}
-                    <br />
-                  <strong>{projectText2.slice(0, 10)}</strong>{projectText2.slice(10)}
-                </div>
+
                 <div className={`gifButton ${videoPaused ? '' : 'playing'}`}>
                   <ImPlay2 className='play' />
                 </div>
               </>
             )}
+                            <div className="videoText">
+                  <strong>{projectText.slice(0, 8)}</strong>{projectText.slice(8)}
+                    <br />
+                  <strong>{projectText2.slice(0, 10)}</strong>{projectText2.slice(10)}
+                </div>
           </>
         )}
       </div>
