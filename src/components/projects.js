@@ -56,36 +56,32 @@ function Projects() {
     setLeftClicked(true)
     setTimeout(() => setLeftClicked(false), 100)
 
-    let lowerVid = 0
+    let topEl = 0
     const [topRight, botRight] =
     zIndex.current == 3 ? [currentVideoRef, nextVideoRef] : [nextVideoRef, currentVideoRef]
-    const positionChoice = zIndex.current == 3 ? 'topRight' : 'botRight'
-    const zInd_1 = topRight.current.getAttribute('zindexswitch')
-    const zInd_2 = topRight.current.getAttribute('zindexswitch2')
-    const newPage = page === 1 ? videoList.length : page - 1
+    const posChoice = zIndex.current == 3 ? 'topRight' : 'botRight'
+    const zInd1 = topRight.current.getAttribute('zindexswitch')
+    const zInd2 = topRight.current.getAttribute('zindexswitch2')
+    const newPageVal = page === 1 ? videoList.length : page - 1
 
-    setPage(newPage)
-    newPage == videoList.length ? lowerVid = newPage - 2 : lowerVid = page - 3
-    
-    if (page !== 1) setActiveTracker(newPage)
-
+    setPage(newPageVal)
+    newPageVal == videoList.length ? topEl = newPageVal - 2 :  topEl = page - 3
     botRight.current.src = prevVideoRef.current.src
+    nextVideoRef.current.style.display = "block"
+    
+
+    if (Object.keys(loadingVideos.current).length == 1) {
+      expectedVideo.current = topRight.current
+      setPlaySpinner(true)
+    }
     if (!videoPaused) botRight.current.play()
       setSliding(prevState => ({
         ...prevState,
-        [positionChoice]: true
+        [posChoice]: true
       }))
-      setTimeout(() => {
-        newPage == 1 ? prevVideoRef.current.src = videoList[videoList.length-1].project
-        : prevVideoRef.current.src = videoList[lowerVid].project
-        setZIndex({ current: zInd_1, next: zInd_2 })
-        setSliding(prevState => ({
-          ...prevState,
-          [positionChoice]: false,
-        }))
-      }, 700)
 
     // PageTracker reverse animation when current page is first page
+    if (page !== 1) setActiveTracker(newPageVal)
     if (activeTracker == 1) {
       const pageTrackers = document.querySelectorAll('.pageTracker');
       let i = 0
@@ -108,13 +104,52 @@ function Projects() {
           y++
           if (y == pageTrackers.length - 1){
             clearInterval(removeGlowIntervalId)
-            setActiveTracker(newPage)
+            setActiveTracker(newPageVal)
           }
         }
         const removeGlowIntervalId = setInterval(removeGlow, 60)
       }, 180)
     }
+
+    animationData.current = {
+      topEl,
+      posChoice,
+      zInd1,
+      zInd2,
+      newPageVal,
+      botRight
+    }
   }
+
+    // Change hidden videos after sliding animation ends
+    const handleAnimationEnd = () => {
+      const { topEl, posChoice, zInd1, zInd2, newPageVal, botRight } = animationData.current
+
+      newPageVal == 1 ? prevVideoRef.current.src = videoList[videoList.length-1].project
+      : prevVideoRef.current.src = videoList[topEl].project
+      setZIndex({ current: zInd1, next: zInd2 })
+      setSliding(prevState => ({
+        ...prevState,
+        [posChoice]: false,
+      }))
+
+      // prevVideoRef.current.src = topEl.current.src
+      // const nextVideoSrc =
+      //   newPageVal === videoList.length
+      //     ? videoList[0].project
+      //     : videoList[newPageVal].project
+      // topEl.current.src = nextVideoSrc
+  
+      // setZIndex({ current: zInd1, next: zInd2 });
+      // setSliding((prevState) => ({
+      //   ...prevState,
+      //   [posChoice]: false,
+      // }))
+      
+      //if (topRight.current) {topRight.current.style.display = "none"}
+      //if (botRight.current) {botRight.current.style.display = "none"}
+      if (nextVideoRef.current) {nextVideoRef.current.style.display = "none"}
+    }
   
   const handleRightClick = () => {
     if (Object.values(sliding).includes(true) || playSpinner ) return
@@ -179,26 +214,7 @@ function Projects() {
       zInd1,
       zInd2,
       newPageVal,
-    };
-  }
-
-  // Change hidden videos after sliding animation ends
-  const handleAnimationEnd = () => {
-    const { topEl, posChoice, zInd1, zInd2, newPageVal } = animationData.current
-    prevVideoRef.current.src = topEl.current.src
-    const nextVideoSrc =
-      newPageVal === videoList.length
-        ? videoList[0].project
-        : videoList[newPageVal].project
-    topEl.current.src = nextVideoSrc
-
-    setZIndex({ current: zInd1, next: zInd2 });
-    setSliding((prevState) => ({
-      ...prevState,
-      [posChoice]: false,
-    }))
-
-    if (topEl.current) {topEl.current.style.display = "none"}
+    }
   }
 
   const handleAnimationStart = () => {
@@ -339,6 +355,8 @@ function Projects() {
               loop
               muted
               style={{ zIndex: zIndex.prev }}
+              onLoadStart={() => {handlePreloadStart(nextVideoRef, "bot")}}
+              onLoadedData={() => {handlePreloadFinish(nextVideoRef)}}
               onAnimationEnd={handleAnimationEnd}
               onAnimationStart={handleAnimationStart}
             />
