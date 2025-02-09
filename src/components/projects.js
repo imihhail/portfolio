@@ -2,7 +2,6 @@ import './home.css';
 import { useRef, useState, useEffect} from 'react';
 import { RiArrowLeftWideFill} from "react-icons/ri";
 import { ImPlay2 } from "react-icons/im";
-
 import api from '../assets/api.mp4';
 import bomberman from '../assets/bomberman.mp4';
 import tetris from '../assets/tetris.mp4';
@@ -18,7 +17,6 @@ function Projects() {
     { project: bomberman, info:["Project: Bomberman-live", "Languages: GO, JavaScript, React"] },
     { project: snetwork, info: ["Project: Social gameNetwork", "Languages: GO, JavaScript, React"] }
   ]
-
   const [leftClicked, setLeftClicked] = useState(false);
   const [rightClicked, setRightClicked] = useState(false);
   const currentVideoRef = useRef(null);
@@ -39,64 +37,20 @@ function Projects() {
   const [projectText2, setProjectText2] = useState("");
   const loopTextIntervals = useRef({});
   const [videosLoading, setVideosLoading] = useState(false);
-  const [nextVideLoading, setNextVideLoading] = useState(false);
   const [playSpinner, setPlaySpinner] = useState(false);
   let expectedVideo = useRef(null);
-  const [isVideoLoaded, setIsVideoLoaded] = useState(false);
-  const [isAnimationEnded, setIsAnimationEnded] = useState(false);
+  const [isTextDeleted, setIsTextDeleted] = useState(false);
+  const animationData = useRef({});
+  const loadingVideos = useRef({});
 
-  function typeText(text, line) {
-    let i = -1
-
-    function letterInterval() {
-      i++
-      if (i < text.length && loopTextIntervals.current[line]) {
-        if (line === 0) {
-          setProjectText(prev => prev + text[i])
-        } else {
-          setProjectText2(prev => prev + text[i])
-        }
-      } else {
-        clearInterval(loopTextIntervals.current[line])
-        delete loopTextIntervals.current[line]
-      }
-    }
-    loopTextIntervals.current[line] = setInterval(letterInterval, 80)
-  }
-
-  function removeText(text, line) {
-    const removeSpeed = 700 / text.length
-    const setText = line === 0 ? setProjectText : setProjectText2;
-
-    const removeInterval = setInterval(() => {
-      setText(prev => {
-        if (prev.length === 0) {
-          clearInterval(removeInterval);
-          if (line === 1 ) {
-            if (!playSpinner) {
-              // typeText(videoList[page - 1].info[0], 0);
-              // typeText(videoList[page - 1].info[1], 1);
-            }
-          }
-          return "";
-        }
-        return prev.slice(0, -1);
-      });
-    }, removeSpeed)
-  }
 
   useEffect(() => {
     if (!initialLoad) {
-        Object.values(loopTextIntervals.current).forEach(intervalId => {
-          clearInterval(intervalId);
-        })
-        // loopTextIntervals.current = {};
-        removeText(projectText, 0);
-        removeText(projectText2, 1);
+      typeText(videoList[page - 1].info[0], 0)
+      typeText(videoList[page - 1].info[1], 1)
     }
-  }, [page, initialLoad]);
+  }, [initialLoad])
   
-
   const handleLeftClick = () => {
     if (Object.values(sliding).includes(true)) return
     setLeftClicked(true)
@@ -167,21 +121,21 @@ function Projects() {
     setRightClicked(true)
     setTimeout(() => setRightClicked(false), 100)
 
-    const [top, bot] =
+    const [topEl, bot] =
     zIndex.current == 3 ? [currentVideoRef, nextVideoRef] : [nextVideoRef, currentVideoRef]
-    const positionChoice = zIndex.current == 3 ? 'topLeft' : 'botLeft'
-    const zInd_1 = top.current.getAttribute('zindexswitch')
-    const zInd_2 = top.current.getAttribute('zindexswitch2')
+    const posChoice = zIndex.current == 3 ? 'topLeft' : 'botLeft'
+    const zInd1 = topEl.current.getAttribute('zindexswitch')
+    const zInd2 = topEl.current.getAttribute('zindexswitch2')
     bot.current.style.display = "block";
 
-    if (nextVideLoading) {
+    if (Object.keys(loadingVideos.current).length == 1) {
       expectedVideo.current = bot.current
       setPlaySpinner(true)
     }
-    
-    const newPage = page == videoList.length ? 1 : page + 1
-    setPage(newPage)
-    if (page !== videoList.length) setActiveTracker(newPage)
+  
+    const newPageVal = page == videoList.length ? 1 : page + 1
+    setPage(newPageVal)
+    if (page !== videoList.length) setActiveTracker(newPageVal)
       
     if (activeTracker == videoList.length) {
       const pageTrackers = document.querySelectorAll('.pageTracker');
@@ -206,7 +160,7 @@ function Projects() {
           
           if (y == 0){
             clearInterval(removeGlowIntervalId)
-            setActiveTracker(newPage)
+            setActiveTracker(newPageVal)
           }
         }
         const removeGlowIntervalId = setInterval(removeGlow, 60)
@@ -215,24 +169,120 @@ function Projects() {
 
     setSliding(prevState => ({
       ...prevState,
-      [positionChoice]: true,
+      [posChoice]: true,
     }))
     
     videoPaused ? bot.current.pause() : bot.current.play()
+    animationData.current = {
+      topEl,
+      posChoice,
+      zInd1,
+      zInd2,
+      newPageVal,
+    };
+  }
+
+  // Change hidden videos after sliding animation ends
+  const handleAnimationEnd = () => {
+    const { topEl, posChoice, zInd1, zInd2, newPageVal } = animationData.current
+    prevVideoRef.current.src = topEl.current.src
+    const nextVideoSrc =
+      newPageVal === videoList.length
+        ? videoList[0].project
+        : videoList[newPageVal].project
+    topEl.current.src = nextVideoSrc
+
+    setZIndex({ current: zInd1, next: zInd2 });
+    setSliding((prevState) => ({
+      ...prevState,
+      [posChoice]: false,
+    }))
+
+    if (topEl.current) {topEl.current.style.display = "none"}
+  }
+
+  const handleAnimationStart = () => {
+    Object.values(loopTextIntervals.current).forEach(intervalId => {
+      clearInterval(intervalId);
+    })
+    // loopTextIntervals.current = {};
+    removeText(projectText, 0)
+    removeText(projectText2, 1)
+  }
+
+  function typeText(text, line) {
+    let i = -1
     
-    setTimeout(() => {
-      prevVideoRef.current.src = top.current.src
-      const nextVideo = newPage === videoList.length ? videoList[0].project : videoList[newPage].project
-      top.current.src = nextVideo
-      setZIndex({ current: zInd_1, next: zInd_2 })
-      setSliding(prevState => ({
-        ...prevState,
-        [positionChoice]: false,
-      }))
-      if (top.current) {
-        top.current.style.display = "none";
+    function letterInterval() {
+      i++
+      if (i < text.length && loopTextIntervals.current[line]) {
+        if (line === 0) {
+          setProjectText(prev => prev + text[i])
+        } else {
+          setProjectText2(prev => prev + text[i])
+        }
+      } else {
+        clearInterval(loopTextIntervals.current[line])
+        delete loopTextIntervals.current[line]
       }
-    }, 800)
+    }
+    loopTextIntervals.current[line] = setInterval(letterInterval, 80)
+  }
+
+  function removeText(text, line) {
+    setIsTextDeleted(false)
+    
+    const removeSpeed = 700 / text.length
+    const setText = line === 0 ? setProjectText : setProjectText2;
+
+    const removeInterval = setInterval(() => {
+      setText(prev => {
+        if (prev.length === 0) {
+          clearInterval(removeInterval);
+          if (line === 1 ) {
+            setIsTextDeleted(true)
+          }
+          return ""
+        }
+        return prev.slice(0, -1)
+      })
+    }, removeSpeed)
+  }
+
+  // Start typing video info text
+  useEffect(() => {
+    if (isTextDeleted) {
+      if (!playSpinner) {
+        typeText(videoList[page - 1].info[0], 0);
+        typeText(videoList[page - 1].info[1], 1);
+      }
+    }
+  }, [isTextDeleted, playSpinner]);
+  
+  const handleVideoLoad = () => {
+    if (initialLoad) {
+      setVideosLoading(false);
+      setInitialLoad(false);
+    }
+  }
+
+  const handlePreloadStart = (videoRef, key) => {
+    if (!initialLoad) {
+      loadingVideos.current[key] = videoRef.current;
+    }
+  }
+  
+  const handlePreloadFinish = (vid) => {
+    if (!initialLoad) {
+      if (expectedVideo.current == vid.current) {
+        setPlaySpinner(false)
+      }
+      Object.keys(loadingVideos.current).forEach((key) => {
+        if (loadingVideos.current[key] === vid.current) {
+          delete loadingVideos.current[key];
+        }
+      })
+    }
   }
 
   const toggleVideoPlay = () => {
@@ -253,57 +303,13 @@ function Projects() {
     if (initialLoad) setVideosLoading(true)
   }
 
-  const handleVideoLoad = () => {
-    if (initialLoad) {
-      setVideosLoading(false);
-      setInitialLoad(false);
-    }
-  }
-
-  const handlePreloadStart = () => {
-    if (!initialLoad) {
-      setNextVideLoading(true);
-    }
-  }
-  
-  const handlePreloadFinish = (vid, zIndex) => {
-    if (!initialLoad) {
-      console.log("zindex: ", zIndex);
-      
-      if (expectedVideo.current == vid.current && zIndex == 3) {
-        setPlaySpinner(false)
-        // typeText(videoList[page - 1].info[0], 0);
-        // typeText(videoList[page - 1].info[1], 1);
-      }
-      console.log("preloadfinsh");
-      
-      setNextVideLoading(false)
-      setIsVideoLoaded(true)
-    }
-  }
-
-  const handleAnimationEnd = () => {
-    console.log("Animation ended");
-    setIsAnimationEnded(true);
-  };
-
-  useEffect(() => {
-    if (isVideoLoaded && isAnimationEnded) {
-      console.log("Both onLoadedData and onAnimationEnd are complete!");
-      // Do something here...
-    }
-  }, [isVideoLoaded, isAnimationEnded]);
-
 
   return (
     <div className="App" >
       <div className='videoContainer' onClick={toggleVideoPlay}>
-        {(videosLoading) && (
-          <div className="loader"></div>
-        )}
-        {(playSpinner) && (
-          <div className="loader2"></div>
-        )}
+        {(videosLoading) && (<div className="loader"></div> )}
+        {(playSpinner) && (<div className="loader2"></div> )}
+
         <video
           className={`currentVideo ${sliding.topRight ? 'slideRight' : ''}${sliding.topLeft ? 'slideLeft' : ''}`}
           ref={currentVideoRef}
@@ -315,13 +321,14 @@ function Projects() {
           style={{ zIndex: zIndex.current }}
           onLoadStart={() => {
             handleVideoLoadStart()
-            handlePreloadStart(currentVideoRef)
+            handlePreloadStart(currentVideoRef, "current")
           }}
           onLoadedData={() => {
             handleVideoLoad()
-            handlePreloadFinish(currentVideoRef, zIndex.current)
+            handlePreloadFinish(currentVideoRef)
           }}
           onAnimationEnd={handleAnimationEnd}
+          onAnimationStart={handleAnimationStart}
         />
         {!videosLoading && (
           <>
@@ -333,6 +340,7 @@ function Projects() {
               muted
               style={{ zIndex: zIndex.prev }}
               onAnimationEnd={handleAnimationEnd}
+              onAnimationStart={handleAnimationStart}
             />
             <video
               className={`nextVideo ${sliding.botRight ? 'slideRight' : ''}${sliding.botLeft ? 'slideLeft' : ''}`}
@@ -343,23 +351,21 @@ function Projects() {
               zindexswitch = "3"
               zindexswitch2 = "2"
               style={{ zIndex: zIndex.next }}
-              onLoadStart={() => {handlePreloadStart(nextVideoRef)}}
-              onLoadedData={() => {handlePreloadFinish(nextVideoRef, zIndex.next)}}
+              onLoadStart={() => {handlePreloadStart(nextVideoRef, "next")}}
+              onLoadedData={() => {handlePreloadFinish(nextVideoRef)}}
               onAnimationEnd={handleAnimationEnd}
+              onAnimationStart={handleAnimationStart}
             />
             {!playSpinner && (
-              <>
-
-                <div className={`gifButton ${videoPaused ? '' : 'playing'}`}>
-                  <ImPlay2 className='play' />
-                </div>
-              </>
+              <div className={`gifButton ${videoPaused ? '' : 'playing'}`}>
+                <ImPlay2 className='play' />
+              </div>
             )}
-                            <div className="videoText">
-                  <strong>{projectText.slice(0, 8)}</strong>{projectText.slice(8)}
-                    <br />
-                  <strong>{projectText2.slice(0, 10)}</strong>{projectText2.slice(10)}
-                </div>
+            <div className="videoText">
+              <strong>{projectText.slice(0, 8)}</strong>{projectText.slice(8)}
+                <br />
+              <strong>{projectText2.slice(0, 10)}</strong>{projectText2.slice(10)}
+            </div>
           </>
         )}
       </div>
