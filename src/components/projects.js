@@ -52,26 +52,25 @@ function Projects() {
   }, [initialLoad])
   
   const handleLeftClick = () => {
-    if (Object.values(sliding).includes(true)) return
+    if (Object.values(sliding).includes(true) || playSpinner ) return
     setLeftClicked(true)
     setTimeout(() => setLeftClicked(false), 100)
 
-    let topEl = 0
-    const [topRight, botRight] =
+    let nextVidInd = 0
+    const [topEl, botRight] =
     zIndex.current == 3 ? [currentVideoRef, nextVideoRef] : [nextVideoRef, currentVideoRef]
     const posChoice = zIndex.current == 3 ? 'topRight' : 'botRight'
-    const zInd1 = topRight.current.getAttribute('zindexswitch')
-    const zInd2 = topRight.current.getAttribute('zindexswitch2')
+    const zInd1 = topEl.current.getAttribute('zindexswitch')
+    const zInd2 = topEl.current.getAttribute('zindexswitch2')
     const newPageVal = page === 1 ? videoList.length : page - 1
 
     setPage(newPageVal)
-    newPageVal == videoList.length ? topEl = newPageVal - 2 :  topEl = page - 3
+    newPageVal == videoList.length ? nextVidInd = newPageVal - 2 : nextVidInd = page - 3
     botRight.current.src = prevVideoRef.current.src
-    nextVideoRef.current.style.display = "block"
+    botRight.current.style.opacity = "1"
     
-
-    if (Object.keys(loadingVideos.current).length == 1) {
-      expectedVideo.current = topRight.current
+    if (Object.keys(loadingVideos.current).length > 0) {
+      expectedVideo.current = botRight.current
       setPlaySpinner(true)
     }
     if (!videoPaused) botRight.current.play()
@@ -117,53 +116,50 @@ function Projects() {
       zInd1,
       zInd2,
       newPageVal,
-      botRight
+      nextVidInd
     }
   }
 
     // Change hidden videos after sliding animation ends
     const handleAnimationEnd = () => {
-      const { topEl, posChoice, zInd1, zInd2, newPageVal, botRight } = animationData.current
+      const {topEl, posChoice, zInd1, zInd2, newPageVal, nextVidInd } = animationData.current
 
-      newPageVal == 1 ? prevVideoRef.current.src = videoList[videoList.length-1].project
-      : prevVideoRef.current.src = videoList[topEl].project
-      setZIndex({ current: zInd1, next: zInd2 })
-      setSliding(prevState => ({
+      if (nextVidInd === undefined) {
+        prevVideoRef.current.src = topEl.current.src
+        const nextVideoSrc =
+          newPageVal === videoList.length
+            ? videoList[0].project
+            : videoList[newPageVal].project
+        topEl.current.src = nextVideoSrc
+      } else {
+        newPageVal == 1 ? prevVideoRef.current.src = videoList[videoList.length-1].project
+        : prevVideoRef.current.src = videoList[nextVidInd].project
+        setZIndex({ current: zInd1, next: zInd2 })
+      }
+      
+      setZIndex({ current: zInd1, next: zInd2 });
+      setSliding((prevState) => ({
         ...prevState,
         [posChoice]: false,
       }))
-
-      // prevVideoRef.current.src = topEl.current.src
-      // const nextVideoSrc =
-      //   newPageVal === videoList.length
-      //     ? videoList[0].project
-      //     : videoList[newPageVal].project
-      // topEl.current.src = nextVideoSrc
-  
-      // setZIndex({ current: zInd1, next: zInd2 });
-      // setSliding((prevState) => ({
-      //   ...prevState,
-      //   [posChoice]: false,
-      // }))
       
-      //if (topRight.current) {topRight.current.style.display = "none"}
-      //if (botRight.current) {botRight.current.style.display = "none"}
-      if (nextVideoRef.current) {nextVideoRef.current.style.display = "none"}
+      if (topEl.current) {topEl.current.style.opacity = "0"}
     }
   
   const handleRightClick = () => {
     if (Object.values(sliding).includes(true) || playSpinner ) return
+    
     setRightClicked(true)
     setTimeout(() => setRightClicked(false), 100)
 
     const [topEl, bot] =
     zIndex.current == 3 ? [currentVideoRef, nextVideoRef] : [nextVideoRef, currentVideoRef]
+    bot.current.style.opacity = "1";
     const posChoice = zIndex.current == 3 ? 'topLeft' : 'botLeft'
     const zInd1 = topEl.current.getAttribute('zindexswitch')
     const zInd2 = topEl.current.getAttribute('zindexswitch2')
-    bot.current.style.display = "block";
-
-    if (Object.keys(loadingVideos.current).length == 1) {
+    
+    if (Object.keys(loadingVideos.current).length > 0) {
       expectedVideo.current = bot.current
       setPlaySpinner(true)
     }
@@ -290,7 +286,7 @@ function Projects() {
   
   const handlePreloadFinish = (vid) => {
     if (!initialLoad) {
-      if (expectedVideo.current == vid.current) {
+      if (expectedVideo.current == vid.current || Object.keys(loadingVideos.current).length == 1) {
         setPlaySpinner(false)
       }
       Object.keys(loadingVideos.current).forEach((key) => {
@@ -302,8 +298,7 @@ function Projects() {
   }
 
   const toggleVideoPlay = () => {
-    if (Object.values(sliding).includes(true)) return
-
+    if (Object.values(sliding).includes(true) || initialLoad) return
     const videoRef = zIndex.current == 3 ? currentVideoRef : nextVideoRef
     
     if (!videoPaused) {
@@ -355,8 +350,8 @@ function Projects() {
               loop
               muted
               style={{ zIndex: zIndex.prev }}
-              onLoadStart={() => {handlePreloadStart(nextVideoRef, "bot")}}
-              onLoadedData={() => {handlePreloadFinish(nextVideoRef)}}
+              onLoadStart={() => {handlePreloadStart(prevVideoRef, "bot")}}
+              onLoadedData={() => {handlePreloadFinish(prevVideoRef)}}
               onAnimationEnd={handleAnimationEnd}
               onAnimationStart={handleAnimationStart}
             />
