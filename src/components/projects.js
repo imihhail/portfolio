@@ -52,7 +52,7 @@ function Projects() {
   }, [initialLoad])
   
   const handleLeftClick = () => {
-    if (Object.values(sliding).includes(true) || playSpinner ) return
+    if (Object.values(sliding).includes(true) || playSpinner || initialLoad) return
     setLeftClicked(true)
     setTimeout(() => setLeftClicked(false), 100)
 
@@ -147,7 +147,7 @@ function Projects() {
     }
   
   const handleRightClick = () => {
-    if (Object.values(sliding).includes(true) || playSpinner ) return
+    if (Object.values(sliding).includes(true) || playSpinner || initialLoad) return
     
     setRightClicked(true)
     setTimeout(() => setRightClicked(false), 100)
@@ -317,6 +317,11 @@ function Projects() {
 
   return (
     <div className="App" >
+      <div className="videoText">
+        <strong>{projectText.slice(0, 8)}</strong>{projectText.slice(8)}
+          <br />
+        <strong>{projectText2.slice(0, 10)}</strong>{projectText2.slice(10)}
+      </div>
       <div className='videoContainer' onClick={toggleVideoPlay}>
         {(videosLoading) && (<div className="loader"></div> )}
         {(playSpinner) && (<div className="loader2"></div> )}
@@ -374,11 +379,6 @@ function Projects() {
                 <ImPlay2 className='play' />
               </div>
             )}
-            <div className="videoText">
-              <strong>{projectText.slice(0, 8)}</strong>{projectText.slice(8)}
-                <br />
-              <strong>{projectText2.slice(0, 10)}</strong>{projectText2.slice(10)}
-            </div>
           </>
         )}
       </div>
