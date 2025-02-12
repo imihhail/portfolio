@@ -50,8 +50,6 @@ function Models() {
         onMouseLeave={handleMouseUpOrLeave}
       >
         {!isMouseDown && <RiDragMoveLine className="rotateIcon" />}
-        {/* Blender icon at bottom left */}
-        <BiLogoBlender className="blenderIcon" />
         <Canvas shadows camera={{ position: [0, 0, 8], fov: 50 }} dpr={[1, 2]} gl={{ antialias: true }}>
           <ambientLight intensity={0.4} />
           <directionalLight position={[5, 5, 5]} intensity={3} castShadow />
@@ -65,7 +63,7 @@ function Models() {
           />
           <Environment files={customHDRI} background={false} />
           <EffectComposer>
-            <HueSaturation saturation={0.12} />
+            <HueSaturation saturation={0.15} />
             <ToneMapping />
             <Bloom
               intensity={0.05}
@@ -76,37 +74,31 @@ function Models() {
           </EffectComposer>
         </Canvas>
       </div>
+      
       <div className='imageContainer'>
-        <p>
-          Japanese pagoda inspired by Chureito pagoda near Mount Fuji. Model made with Blender and textured with Adobe Substance Painter.
+        <p className='imageText'>
+          Japanese pagoda inspired by Chureito pagoda near Mount Fuji.<br/> <br/> Model made with <b>Blender</b> and textured with <b>Adobe Substance Painter</b>. Images are taken in <b>Unreal Engine</b>. 
         </p>
+      <div className='images'>
         <div className="imageWithIcon" onClick={() => handleImageClick(bell, "Bell")}>
           <img src={bell} alt="Bell" />
-          <SiUnrealengine className="unrealIcon" />
           <ImEnlarge className="enlargeIcon" />
         </div>
         <div className="imageWithIcon" onClick={() => handleImageClick(closerLook, "Closer Look")}>
           <img src={closerLook} alt="Closer Look" />
-          <SiUnrealengine className="unrealIcon" />
           <ImEnlarge className="enlargeIcon" />
         </div>
         <div className="imageWithIcon" onClick={() => handleImageClick(sunSet, "Sun Set")}>
           <img src={sunSet} alt="Sun Set" />
-          <SiUnrealengine className="unrealIcon" />
           <ImEnlarge className="enlargeIcon" />
         </div>
-        {/* Uncomment to include wireframe image
-        <div className="imageWithIcon" onClick={() => handleImageClick(wireFrame, "Wireframe")}>
-          <img src={wireFrame} alt="Wireframe" />
-          <SiUnrealengine className="unrealIcon" />
-        </div>
-        */}
       </div>
-      {selectedImage && (
-        <div className="modal" onClick={handleCloseModal}>
-          <img src={selectedImage.src} alt={selectedImage.alt} />
-        </div>
-      )}
+        {selectedImage && (
+          <div className="modal" onClick={handleCloseModal}>
+            <img src={selectedImage.src} alt={selectedImage.alt} />
+          </div>
+        )}
+      </div>
     </div>
   );
 }

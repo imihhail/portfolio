@@ -1,5 +1,7 @@
 
 .navSection {
+  display: flex;
+  flex-direction: column;
   background: transparent;
   box-sizing: border-box;
   overflow: hidden;
@@ -9,35 +11,10 @@
 .sectionsLinks {
   font-size: 2rem;
   display: flex;
-  justify-self: end;
+  justify-content: flex-end;
   gap: 40px;
   text-decoration: none;
   padding: 0px 20px;
-}
-
-@media (max-width: 1920px) {
-  .sectionsLinks {
-    font-size: 1.6rem;
-    gap: 25px;
-  }
-}
-
-@media (max-width: 600px) {
-  .sectionsLinks {
-    font-size: 0.7rem;
-    gap: 10px;
-  }
-}
-
-.sectionsLinks a {
-  text-decoration: none;
-  color: rgb(1, 160, 209);
-  /* text-shadow: 0 0 15px #0ff, 0 0 30px #00f; */
-}
-
-.sectionsLinks a:hover {
-    color: #ff7b00;
-   /* text-shadow: 0 0 15px #0ff, 0 0 30px #00f; */
 }
 
 .topLine {
@@ -45,6 +22,45 @@
   border-bottom: 1px solid rgb(1, 160, 209);
   margin-top: 20px;
 }
+
+@media (max-width: 1920px) {
+  .sectionsLinks {
+    font-size: 1.6rem;
+    gap: 25px;
+    
+  }
+}
+
+@media (max-width: 768px) {
+  .sectionsLinks {
+    gap: 10px;
+    justify-content: space-between;
+    padding: 0px 5px;
+  }
+
+  .topLine {
+    margin-top: 10px;
+  }
+}
+
+.sectionsLinks a {
+  text-decoration: none;
+  color: rgb(1, 160, 209);
+  transition: color 0.3s ease;
+  font-size: clamp(1.2rem, 1.2vw, 2rem);
+}
+
+.sectionsLinks a.active {
+  color: #03a9f4;
+  font-weight: bold;
+  border-bottom: 1px solid #03a9f4;
+}
+
+.sectionsLinks a:hover {
+  color: #03a9f4;
+}
+
+
 
 .topLineShining {
   border: none;

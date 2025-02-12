@@ -1,4 +1,4 @@
-import './home.css';
+import './projects.css';
 import { useRef, useState, useEffect} from 'react';
 import { RiArrowLeftWideFill} from "react-icons/ri";
 import { ImPlay2 } from "react-icons/im";
