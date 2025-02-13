@@ -1,4 +1,6 @@
 .footerSection {
+    display: flex;
+    justify-content: center;
     padding: 0;
     margin: 0;
 }
@@ -11,9 +13,9 @@
 .mediaIcons {
     display: flex;
     gap: 40px;
-    justify-self: center;
     padding: 0px;
-    padding-top: 10px;
+    padding-top: min(0.6rem, 1.3%);
+    padding-bottom: min(0.5rem, 1%);
     padding-left: 40px;
     width: 240px;
     overflow: hidden;

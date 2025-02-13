@@ -12,42 +12,37 @@
   font-size: 2rem;
   display: flex;
   justify-content: flex-end;
-  gap: 40px;
+  gap: 2%;
   text-decoration: none;
-  padding: 0px 20px;
+  padding: min(1em, 1.2%);
 }
 
 .topLine {
   border: none;
   border-bottom: 1px solid rgb(1, 160, 209);
-  margin-top: 20px;
 }
 
 @media (max-width: 1920px) {
   .sectionsLinks {
-    font-size: 1.6rem;
-    gap: 25px;
+
+   
     
   }
 }
 
 @media (max-width: 768px) {
   .sectionsLinks {
-    gap: 10px;
     justify-content: space-between;
-    padding: 0px 5px;
+    
   }
 
-  .topLine {
-    margin-top: 10px;
-  }
 }
 
 .sectionsLinks a {
   text-decoration: none;
   color: rgb(1, 160, 209);
   transition: color 0.3s ease;
-  font-size: clamp(1.2rem, 1.2vw, 2rem);
+  font-size: clamp(1.2rem, 1.3vw, 1.9rem);
 }
 
 .sectionsLinks a.active {

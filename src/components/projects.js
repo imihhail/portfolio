@@ -9,6 +9,7 @@ import snetwork from '../assets/snetwork.mp4';
 import messenger from '../assets/messenger.mp4';
 
 
+
 function Projects() {
   const videoList = [
     { project: api, info: ["Project: GO-API", "Languages: GO, HTML, CSS"] },
@@ -59,6 +60,9 @@ function Projects() {
     let nextVidInd = 0
     const [topEl, botRight] =
     zIndex.current == 3 ? [currentVideoRef, nextVideoRef] : [nextVideoRef, currentVideoRef]
+    botRight.current.src = prevVideoRef.current.src // Change algorythm to imporve perfomance on low devices
+
+    botRight.current.style.opacity = "1"
     const posChoice = zIndex.current == 3 ? 'topRight' : 'botRight'
     const zInd1 = topEl.current.getAttribute('zindexswitch')
     const zInd2 = topEl.current.getAttribute('zindexswitch2')
@@ -66,8 +70,8 @@ function Projects() {
 
     setPage(newPageVal)
     newPageVal == videoList.length ? nextVidInd = newPageVal - 2 : nextVidInd = page - 3
-    botRight.current.src = prevVideoRef.current.src
-    botRight.current.style.opacity = "1"
+    
+    
     
     if (Object.keys(loadingVideos.current).length > 0) {
       expectedVideo.current = botRight.current
@@ -132,9 +136,9 @@ function Projects() {
             : videoList[newPageVal].project
         topEl.current.src = nextVideoSrc
       } else {
+
         newPageVal == 1 ? prevVideoRef.current.src = videoList[videoList.length-1].project
         : prevVideoRef.current.src = videoList[nextVidInd].project
-        setZIndex({ current: zInd1, next: zInd2 })
       }
       
       setZIndex({ current: zInd1, next: zInd2 });

@@ -16,6 +16,9 @@ body {
 }
 
 .App {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   padding: 20px;
 }
 
@@ -30,6 +33,7 @@ body {
   overflow: hidden;
   border: rgba(0, 195, 255, 0.548) 1px solid;
   box-shadow: 0 0 20px rgba(0, 195, 255, 0.37);
+  height: auto;
 }
 
 .nextVideo, .previousVideo, .currentVideo {
@@ -75,6 +79,7 @@ body {
 
 .videoText {
   display: inline-block;
+  align-self: self-start;
   color: rgb(1, 160, 209);
   font-size: 1.5rem;
   z-index: 5;
@@ -86,7 +91,6 @@ body {
 
 .arrows {
   display: flex;
-  justify-self: center;
   box-sizing: border-box;
   margin-top: 10px;
 }
@@ -107,9 +111,11 @@ body {
   background:rgb(0, 195, 255);
 }
 
+
+
 .gifButton {
   background: rgb(4, 29, 46);
-  font-size: 2.0vw;
+  font-size: clamp(1.2rem, 2vw, 4.9rem);
   border-radius: 50%;
   display: flex;
   justify-content: center;
@@ -158,35 +164,70 @@ body {
 }
 
 .aIcon, .bIcon {
-  width: 60px;
-  height: 90px;
-  color:rgb(0, 195, 255);
+  font-size: 6rem;
+  color: rgb(0, 195, 255);
   filter: drop-shadow(0px 0px 10px rgba(0, 195, 255, 0.8));
-  transform: rotateX(45deg) scale(1.5);
+  transform: rotateX(45deg);
   cursor: pointer;
   transition: 0.1s linear;
 }
 
 .bIcon {
-  transform: rotateX(45deg) rotateZ(180deg) scale(1.5);
+  transform: rotateX(45deg) rotateZ(180deg);
 }
 
-.bIcon:hover {
-  transform: rotateX(45deg) rotateZ(180deg) scale(1.6);
+/* .bIcon:hover {
+  transform: rotateX(45deg) rotateZ(180deg) ;
 }
 
 .aIcon:hover {
-  transform: rotateX(45deg) scale(1.6);
-}
+  transform: rotateX(45deg) ;
+} */
 
 .aIcon.clicked {
-  transform: rotateX(50deg) scale(1.6) translateX(-5px);
+  transform: rotateX(50deg) translateX(-5px);
 }
 
 .bIcon.clicked {
-  transform: rotateX(50deg) rotateZ(180deg) scale(1.6) translateX(-5px);
+  transform: rotateX(50deg) rotateZ(180deg) translateX(-5px);
 }
 
+
+@media screen and (max-width: 768px) {
+  .videoText {
+    font-size: 0.8rem;
+    height: 2rem;
+  }
+
+  .App {
+    padding: 4px;
+  }
+
+  .pageTracker {
+    width: 40px;
+    height: 8px;
+    border-radius: 2px;
+  }
+
+  .aIcon, .bIcon {
+    transform: rotateX(45deg);
+    font-size: 3rem;
+    margin: 0;
+    padding: 0;
+    transform: rotateX(45deg) scale(1.3);
+  }
+
+  .bIcon {
+    transform: rotateX(45deg) rotateZ(180deg) scale(1.3);
+  }
+}
+
+@media screen and (max-width: 1024px) and (orientation: landscape) {
+  .videoText {
+    font-size: 0.8rem;
+    height: 2rem;
+  }
+}
 /* .loader {
   z-index: 2;
   width: 70px;

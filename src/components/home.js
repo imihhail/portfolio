@@ -10,7 +10,7 @@ function Home() {
         <p>
           Passionate about building modern web applications and creating stunning 3D models.
           Skilled in JavaScript, React, Java, and backend technologies.
-        </p>   
+        </p>
       </div>
       <div className="homeImage">
         <img src={profilePhoto} alt="Profile" className="profilePhoto" />

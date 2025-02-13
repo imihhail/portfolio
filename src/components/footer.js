@@ -13,29 +13,31 @@ const icons = [
 ];
 
 return (
-    <div className="footerSection">
-        <div className="bottomLine">
-        </div>
-        <div className="mediaIcons">
-            <div className='iconArray1'>
-                {icons.map((icon, index) => {
-                    const IconComponent = icon.component;
-                        return (
-                            <a key={index} href={icon.link} target="_blank" rel="noopener noreferrer">
-                                <IconComponent className='icon' />
-                            </a>
-                        );
-                    })}
-            </div>
-            <div className='iconArray2'>
-                {icons.map((icon, index) => {
-                    const IconComponent = icon.component;
-                        return (
-                            <a key={index} href={icon.link} target="_blank" rel="noopener noreferrer">
-                                <IconComponent className='icon' />
-                            </a>
-                        );
-                    })}
+    <div>
+        <div className="bottomLine"> </div>
+        <div className="footerSection">
+
+            <div className="mediaIcons">
+                <div className='iconArray1'>
+                    {icons.map((icon, index) => {
+                        const IconComponent = icon.component;
+                            return (
+                                <a key={index} href={icon.link} target="_blank" rel="noopener noreferrer">
+                                    <IconComponent className='icon' />
+                                </a>
+                            );
+                        })}
+                </div>
+                <div className='iconArray2'>
+                    {icons.map((icon, index) => {
+                        const IconComponent = icon.component;
+                            return (
+                                <a key={index} href={icon.link} target="_blank" rel="noopener noreferrer">
+                                    <IconComponent className='icon' />
+                                </a>
+                            );
+                        })}
+                </div>
             </div>
         </div>
     </div>

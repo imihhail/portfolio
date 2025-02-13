@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, Suspense } from 'react';
 import './models.css';
 import { Canvas } from '@react-three/fiber';
-import { OrbitControls, useGLTF, Environment } from '@react-three/drei';
+import { OrbitControls, useGLTF, Environment, Html, useProgress } from '@react-three/drei';
 import { EffectComposer, Bloom, ToneMapping, HueSaturation } from '@react-three/postprocessing';
 import pagodaGLB from '../assets/SM_Pagoda.glb';
 import bell from '../assets/bell.jpg';
@@ -13,6 +13,25 @@ import { RiDragMoveLine } from "react-icons/ri";
 import { SiUnrealengine } from "react-icons/si";
 import { BiLogoBlender } from "react-icons/bi";
 import { ImEnlarge } from "react-icons/im";
+
+function Loader() {
+  const { progress } = useProgress();
+  return (
+    <Html center>
+      <div className="loader">
+
+      </div>
+      <div className="loaderr">
+        {progress.toFixed(0)}% loaded
+      </div>
+    </Html>
+  );
+}
+
+function Model() {
+  const { scene } = useGLTF(pagodaGLB);
+  return <primitive object={scene} scale={0.5} castShadow receiveShadow />;
+}
 
 function Models() {
   const [isMouseDown, setIsMouseDown] = useState(false);
@@ -27,11 +46,6 @@ function Models() {
   const handleMouseUpOrLeave = () => {
     setIsMouseDown(false);
   };
-
-  function Model() {
-    const { scene } = useGLTF(pagodaGLB);
-    return <primitive object={scene} scale={0.5} castShadow receiveShadow />;
-  }
 
   const handleImageClick = (src, alt) => {
     setSelectedImage({ src, alt });
@@ -54,7 +68,12 @@ function Models() {
           <ambientLight intensity={0.4} />
           <directionalLight position={[5, 5, 5]} intensity={3} castShadow />
           <spotLight position={[2, 5, 3]} angle={0.3} intensity={2} castShadow />
-          <Model />
+          
+          {/* Wrap the Model with Suspense and show Loader until it's ready */}
+          <Suspense fallback={<Loader />}>
+            <Model />
+          </Suspense>
+          
           <OrbitControls
             enableDamping
             autoRotate
@@ -76,23 +95,24 @@ function Models() {
       </div>
       
       <div className='imageContainer'>
-        <p className='imageText'>
-          Japanese pagoda inspired by Chureito pagoda near Mount Fuji.<br/> <br/> Model made with <b>Blender</b> and textured with <b>Adobe Substance Painter</b>. Images are taken in <b>Unreal Engine</b>. 
-        </p>
-      <div className='images'>
-        <div className="imageWithIcon" onClick={() => handleImageClick(bell, "Bell")}>
-          <img src={bell} alt="Bell" />
-          <ImEnlarge className="enlargeIcon" />
+        <div className='imageText'>
+          <p>Japanese pagoda inspired by Chureito pagoda near Mount Fuji.</p>
+          <p className='loweText'> Model made with <b>Blender</b> and textured with <b>Adobe Substance Painter</b>. Images are taken in <b>Unreal Engine</b>. </p>
         </div>
-        <div className="imageWithIcon" onClick={() => handleImageClick(closerLook, "Closer Look")}>
-          <img src={closerLook} alt="Closer Look" />
-          <ImEnlarge className="enlargeIcon" />
+        <div className='images'>
+          <div className="imageWithIcon" onClick={() => handleImageClick(bell, "Bell")}>
+            <img src={bell} alt="Bell" />
+            <ImEnlarge className="enlargeIcon" />
+          </div>
+          <div className="imageWithIcon" onClick={() => handleImageClick(closerLook, "Closer Look")}>
+            <img src={closerLook} alt="Closer Look" />
+            <ImEnlarge className="enlargeIcon" />
+          </div>
+          <div className="imageWithIcon" onClick={() => handleImageClick(sunSet, "Sun Set")}>
+            <img src={sunSet} alt="Sun Set" />
+            <ImEnlarge className="enlargeIcon" />
+          </div>
         </div>
-        <div className="imageWithIcon" onClick={() => handleImageClick(sunSet, "Sun Set")}>
-          <img src={sunSet} alt="Sun Set" />
-          <ImEnlarge className="enlargeIcon" />
-        </div>
-      </div>
         {selectedImage && (
           <div className="modal" onClick={handleCloseModal}>
             <img src={selectedImage.src} alt={selectedImage.alt} />
