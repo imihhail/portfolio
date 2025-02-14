@@ -7,16 +7,18 @@ import bomberman from '../assets/bomberman.mp4';
 import tetris from '../assets/tetris.mp4';
 import snetwork from '../assets/snetwork.mp4';
 import messenger from '../assets/messenger.mp4';
-
+import { FaGithub } from "react-icons/fa";
+import { FaSquareGithub } from "react-icons/fa6";
+import { VscGithub } from "react-icons/vsc";
 
 
 function Projects() {
   const videoList = [
-    { project: api, info: ["Project: GO-API", "Languages: GO, HTML, CSS"] },
-    { project: messenger, info: ["Project: Forum-chat", "Languages: GO, JavaScript"] },
-    { project: tetris, info: ["Project: Tetris", "Languages: GO, JavaScript"] },
-    { project: bomberman, info:["Project: Bomberman-live", "Languages: GO, JavaScript, React"] },
-    { project: snetwork, info: ["Project: Social gameNetwork", "Languages: GO, JavaScript, React"] }
+    { project: api, info: ["Project: GO-API", "Languages: GO, HTML, CSS", "https://github.com/imihhail/GO-API"] },
+    { project: messenger, info: ["Project: Forum-chat", "Languages: GO, JavaScript", "https://github.com/imihhail/Forum-Chat"] },
+    { project: tetris, info: ["Project: Tetris", "Languages: GO, JavaScript", "https://github.com/imihhail/Tetris"] },
+    { project: bomberman, info:["Project: Bomberman-live", "Languages: GO, JavaScript, React", "https://github.com/imihhail/Bomberman-live"] },
+    { project: snetwork, info: ["Project: Social gameNetwork", "Languages: GO, JavaScript, React", "https://github.com/imihhail/social-gamenetwork"] }
   ]
   const [leftClicked, setLeftClicked] = useState(false);
   const [rightClicked, setRightClicked] = useState(false);
@@ -385,8 +387,11 @@ function Projects() {
             )}
           </>
         )}
+        <a href={videoList[page - 1].info[2]} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()}>
+          <VscGithub className='ghLink' />
+          <div className='whitebackground'></div>
+        </a>
       </div>
-
       <div className="arrows">
         <RiArrowLeftWideFill onMouseDown={handleLeftClick} className={`aIcon ${leftClicked ? 'clicked' : ''}`}/>
         {videoList.map((key, index) => (

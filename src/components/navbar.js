@@ -32,7 +32,7 @@ export default function NavBar() {
           Hom<span className={`${flickering ? "flicker1" : ""}`}>e</span>
         </Link>
         <Link to="/projects" className={location.pathname === "/projects" ? "active" : ""}>
-          Projcts
+          Projects
         </Link>
         <Link to="/models" className={location.pathname === "/models" ? "active" : ""}>
           3D Model<span className={`${flickering2 ? "flicker2" : ""}`}>s</span>
