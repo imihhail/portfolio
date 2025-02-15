@@ -1,6 +1,32 @@
 import { Link, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
+import pagodaGLB from '../assets/ivar2.glb';
+import { Canvas } from '@react-three/fiber';
+import { LoopOnce } from "three";
 import "./navbar.css";
+import { OrbitControls, useGLTF, Environment, useAnimations } from '@react-three/drei';
+import { EffectComposer, Bloom, ToneMapping, HueSaturation } from '@react-three/postprocessing';
+
+function Model() {
+  const { scene, animations } = useGLTF(pagodaGLB);
+  // useAnimations takes in the animations and the scene, and returns actions and names.
+  const { actions, names } = useAnimations(animations, scene);
+
+  useEffect(() => {
+    // Check if there are animations and play the first one.
+    if (names.length) {
+      const action = actions[names[0]];
+      // Set the loop mode to play only once
+      action.setLoop(LoopOnce, 1);
+      // Clamp the animation so it stops at the last frame when finished
+      action.clampWhenFinished = true;
+      // Reset the action to the start and play it
+      action.reset();
+      action.play();
+    }
+  }, [actions, names]);
+  return <primitive object={scene} scale={1} castShadow receiveShadow />;
+}
 
 export default function NavBar() {
   const location = useLocation();
@@ -22,12 +48,29 @@ export default function NavBar() {
 
   useEffect(() => {
     const intervalId = setInterval(flickerCycle, 15000);
+    console.log(window.innerWidth);
+    
     return () => clearInterval(intervalId);
   }, []);
 
   return (
     <nav className="navSection">
-      <div className="sectionsLinks">
+      <div className="leftSection">
+        <div className="myName">
+          <Canvas shadows camera={{ position: [0, 0, 3.4], fov: 50 }} gl={{ antialias: true }}>
+            <Environment preset="sunset" background={false} />
+            <Model />
+            <OrbitControls enableDamping autoRotate autoRotateSpeed={1} target={[0, 0, 0]} />
+            <EffectComposer>
+              <HueSaturation saturation={0.15} />
+              <ToneMapping />
+              <Bloom intensity={0.05} luminanceThreshold={0.1} luminanceSmoothing={0.025} radius={0.6} />
+            </EffectComposer>
+          </Canvas>
+        </div>
+      </div>
+
+      <div className="rightSection">
         <Link to="/" className={location.pathname === "/" ? "active" : ""}>
           Hom<span className={`${flickering ? "flicker1" : ""}`}>e</span>
         </Link>
@@ -41,6 +84,7 @@ export default function NavBar() {
           Cont<span className={`${flickering3 ? "flicker3" : ""}`}>a</span>ct
         </Link>
       </div>
+
       <div className="topLine"></div>
       <div className={`topLineShining ${lineFlash ? "zap" : ""}`}></div>
     </nav>

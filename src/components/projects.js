@@ -73,8 +73,6 @@ function Projects() {
     setPage(newPageVal)
     newPageVal == videoList.length ? nextVidInd = newPageVal - 2 : nextVidInd = page - 3
     
-    
-    
     if (Object.keys(loadingVideos.current).length > 0) {
       expectedVideo.current = botRight.current
       setPlaySpinner(true)
@@ -381,16 +379,19 @@ function Projects() {
               onAnimationStart={handleAnimationStart}
             />
             {!playSpinner && (
+              <>
               <div className={`gifButton ${videoPaused ? '' : 'playing'}`}>
                 <ImPlay2 className='play' />
               </div>
+              <a href={videoList[page - 1].info[2]} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()}>
+              <VscGithub className='ghLink' />
+              <div className='whitebackground'></div>
+            </a>
+            </>
             )}
           </>
         )}
-        <a href={videoList[page - 1].info[2]} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()}>
-          <VscGithub className='ghLink' />
-          <div className='whitebackground'></div>
-        </a>
+
       </div>
       <div className="arrows">
         <RiArrowLeftWideFill onMouseDown={handleLeftClick} className={`aIcon ${leftClicked ? 'clicked' : ''}`}/>
