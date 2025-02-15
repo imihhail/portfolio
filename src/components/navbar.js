@@ -11,21 +11,23 @@ function Model() {
   const { scene, animations } = useGLTF(pagodaGLB);
   // useAnimations takes in the animations and the scene, and returns actions and names.
   const { actions, names } = useAnimations(animations, scene);
+  const [modelSale, setModelScale] = useState(1)
 
   useEffect(() => {
-    // Check if there are animations and play the first one.
     if (names.length) {
-      const action = actions[names[0]];
-      // Set the loop mode to play only once
-      action.setLoop(LoopOnce, 1);
-      // Clamp the animation so it stops at the last frame when finished
-      action.clampWhenFinished = true;
-      // Reset the action to the start and play it
-      action.reset();
-      action.play();
+      if (window.innerWidth < 1800) {
+        setModelScale(0.77)
+      }
+      const action = actions[names[0]]
+      action.setLoop(LoopOnce, 1)
+      action.clampWhenFinished = true
+      action.reset()
+      action.play()
+      console.log("Animation finished");
+      
     }
-  }, [actions, names]);
-  return <primitive object={scene} scale={1} castShadow receiveShadow />;
+  }, [actions, names])
+  return <primitive object={scene} scale={modelSale} castShadow receiveShadow />
 }
 
 export default function NavBar() {
@@ -46,12 +48,15 @@ export default function NavBar() {
     setTimeout(() => setFlickering3(true), 900);
   }
 
-  useEffect(() => {
-    const intervalId = setInterval(flickerCycle, 15000);
-    console.log(window.innerWidth);
-    
-    return () => clearInterval(intervalId);
-  }, []);
+useEffect(() => {
+  // Call immediately on load
+  flickerCycle();
+  
+  // Then set up the interval for subsequent calls every 15 seconds
+  const intervalId = setInterval(flickerCycle, 15000);
+  return () => clearInterval(intervalId);
+}, []);
+
 
   return (
     <nav className="navSection">

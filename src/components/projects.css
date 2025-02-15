@@ -105,7 +105,7 @@ body {
   color: rgb(1, 160, 209);
   font-size: clamp(0.8rem, 1.5rem, 0.9vw);
   z-index: 5;
-  height: 4.2rem;
+  height: 3.2rem;
   padding: 5px 10px;
   padding-left: 0px;
   border-radius: 3px;
