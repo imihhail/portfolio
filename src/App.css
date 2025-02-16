@@ -5,16 +5,15 @@
   background: radial-gradient(circle at 50% 65%, #1c3138, #050505);
   background-color: #f9f9f9;
   box-shadow: 0 4px 8px rgba(3, 150, 248, 0.3);
-  width: 55%;
+  width: 55vw;
   max-width: 1400px;
   margin: 0 auto;
   padding: 0px 10px;
   border-radius: 10px;
   box-sizing: border-box;
-  height: auto; 
-  min-height: 100dvh; 
+  height: auto;
+  min-height: 100dvh;
 }
-
 
 @media (max-width: 768px) {
   .container {
@@ -28,7 +27,6 @@
   .container {
     width: 80%;
     min-height: 100vh;
-
   }
 }
 

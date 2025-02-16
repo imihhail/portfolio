@@ -80,7 +80,6 @@
   }
 }
 
-/* Flicker animations */
 .flicker1, .flicker2, .flicker3 {
   animation: flicker 0.5s linear;
 }
@@ -96,15 +95,18 @@
   100% {opacity: 1;}
 }
 
-/* Responsive adjustments */
-@media (max-width: 768px) {
+@media (max-width: 600px) {
   .navSection {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: space-between;
+    padding: 0.4em 0.2em;
   }
   .rightSection {
     width: 100%;
-    justify-content: space-around;
-    margin-top: 0.5em;
+    justify-content: space-between;
+  }
+
+  .leftSection {
+    display: none;
   }
 }

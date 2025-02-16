@@ -14,9 +14,7 @@ function Model() {
 
   useEffect(() => {
     if (names.length) {
-      if (window.innerWidth < 1800) {
-        setModelScale(0.77);
-      }
+      setModelScale(0.000415 * window.innerWidth);
       const action = actions[names[0]];
       action.setLoop(LoopOnce, 1);
       action.clampWhenFinished = true;
@@ -35,7 +33,6 @@ export default function NavBar() {
   const [flickering2, setFlickering2] = useState(false);
   const [flickering3, setFlickering3] = useState(false);
   const [lineFlash, setLineFlash] = useState(false);
-  // State to control when to show the 3D model
   const [showModel, setShowModel] = useState(false);
 
   function flickerCycle() {
