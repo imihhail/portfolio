@@ -1,13 +1,13 @@
 import { Link, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
-import pagodaGLB from '../assets/ivar2.glb';
-import { Canvas } from '@react-three/fiber';
+import pagodaGLB from "../assets/ivar3.glb";
+import { Canvas, useFrame } from "@react-three/fiber";
 import { LoopOnce } from "three";
 import "./navbar.css";
-import { OrbitControls, useGLTF, Environment, useAnimations } from '@react-three/drei';
-import { EffectComposer, Bloom, ToneMapping, HueSaturation } from '@react-three/postprocessing';
+import { OrbitControls, useGLTF, Environment, useAnimations } from "@react-three/drei";
+import { EffectComposer, Bloom, ToneMapping, HueSaturation } from "@react-three/postprocessing";
 
-function Model() {
+function Model({ setModelLoaded }) {
   const { scene, animations } = useGLTF(pagodaGLB);
   const { actions, names } = useAnimations(animations, scene);
   const [modelScale, setModelScale] = useState(1);
@@ -20,20 +20,19 @@ function Model() {
       action.clampWhenFinished = true;
       action.reset();
       action.play();
-      console.log("Animation finished");
+      setModelLoaded(true);
     }
-  }, [actions, names]);
+  }, [actions, names, setModelLoaded]);
 
   return <primitive object={scene} scale={modelScale} castShadow receiveShadow />;
 }
 
-export default function NavBar() {
+export default function NavBar({ setModelLoaded }) {
   const location = useLocation();
   const [flickering, setFlickering] = useState(false);
   const [flickering2, setFlickering2] = useState(false);
   const [flickering3, setFlickering3] = useState(false);
   const [lineFlash, setLineFlash] = useState(false);
-  const [showModel, setShowModel] = useState(false);
 
   function flickerCycle() {
     setFlickering(false);
@@ -47,35 +46,24 @@ export default function NavBar() {
   }
 
   useEffect(() => {
-    // Start the flickering cycle immediately and then every 15 seconds
-    flickerCycle();
-    const intervalId = setInterval(flickerCycle, 15000);
+    const intervalId = setInterval(flickerCycle, 20000);
     return () => clearInterval(intervalId);
-  }, []);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setShowModel(true);
-    }, 3000);
-    return () => clearTimeout(timer);
   }, []);
 
   return (
     <nav className="navSection">
       <div className="leftSection">
         <div className="myName">
-          {showModel && (
-            <Canvas shadows camera={{ position: [0, 0, 3.4], fov: 50 }} gl={{ antialias: true }}>
-              <Environment preset="sunset" background={false} />
-              <Model />
-              <OrbitControls enableDamping autoRotate autoRotateSpeed={1} target={[0, 0, 0]} />
-              <EffectComposer>
-                <HueSaturation saturation={0.15} />
-                <ToneMapping />
-                <Bloom intensity={0.05} luminanceThreshold={0.1} luminanceSmoothing={0.025} radius={0.6} />
-              </EffectComposer>
-            </Canvas>
-          )}
+          <Canvas shadows camera={{ position: [0, 0, 4.3], fov: 50 }} gl={{ antialias: true }}>
+            <Environment preset="sunset" background={false} />
+            <Model setModelLoaded={setModelLoaded} />
+            <OrbitControls enableDamping autoRotate autoRotateSpeed={0.8} target={[0, 0, 0]} />
+            <EffectComposer>
+              <HueSaturation saturation={0.15} />
+              <ToneMapping />
+              <Bloom intensity={0.05} luminanceThreshold={0.1} luminanceSmoothing={0.025} radius={0.6} />
+            </EffectComposer>
+          </Canvas>
         </div>
       </div>
 

@@ -2,23 +2,21 @@ import './projects.css';
 import { useRef, useState, useEffect} from 'react';
 import { RiArrowLeftWideFill} from "react-icons/ri";
 import { ImPlay2 } from "react-icons/im";
-import api from '../assets/api.mp4';
-import bomberman from '../assets/bomberman.mp4';
+import api from '../assets/api1.mp4';
+import bomberman from '../assets/bomberman1.mp4';
 import tetris from '../assets/tetris.mp4';
-import snetwork from '../assets/snetwork.mp4';
+import snetwork from '../assets/snetwork1.mp4';
 import messenger from '../assets/messenger.mp4';
-import { FaGithub } from "react-icons/fa";
-import { FaSquareGithub } from "react-icons/fa6";
 import { VscGithub } from "react-icons/vsc";
 
 
-function Projects() {
+function Projects({ modelLoaded }) {
   const videoList = [
-    { project: api, info: ["Project: GO-API", "Languages: GO, HTML, CSS", "https://github.com/imihhail/GO-API"] },
-    { project: messenger, info: ["Project: Forum-chat", "Languages: GO, JavaScript", "https://github.com/imihhail/Forum-Chat"] },
-    { project: tetris, info: ["Project: Tetris", "Languages: GO, JavaScript", "https://github.com/imihhail/Tetris"] },
-    { project: bomberman, info:["Project: Bomberman-live", "Languages: GO, JavaScript, React", "https://github.com/imihhail/Bomberman-live"] },
-    { project: snetwork, info: ["Project: Social gameNetwork", "Languages: GO, JavaScript, React", "https://github.com/imihhail/social-gamenetwork"] }
+    { project: snetwork, info: ["Project: Social network", "Technology: GO, JavaScript, React, SQL", "https://github.com/imihhail/social-gamenetwork"] },
+    { project: bomberman, info:["Project: Bomberman-live", "Technology: GO, JavaScript, React, SQL", "https://github.com/imihhail/Bomberman-live"] },
+    { project: tetris, info: ["Project: Tetris-Survival", "Technology: GO, JavaScript", "https://github.com/imihhail/Tetris"] },
+    { project: messenger, info: ["Project: Forum-chat", "Technology: GO, JavaScript, SQL", "https://github.com/imihhail/Forum-Chat"] },
+    { project: api, info: ["Project: GO-API", "Technology: GO, HTML, CSS", "https://github.com/imihhail/GO-API"] }
   ]
   const [leftClicked, setLeftClicked] = useState(false);
   const [rightClicked, setRightClicked] = useState(false);
@@ -48,11 +46,11 @@ function Projects() {
 
 
   useEffect(() => {
-    if (!initialLoad) {
+    if (!initialLoad && modelLoaded) {
       typeText(videoList[page - 1].info[0], 0)
       typeText(videoList[page - 1].info[1], 1)
     }
-  }, [initialLoad])
+  }, [initialLoad, modelLoaded])
   
   const handleLeftClick = () => {
     if (Object.values(sliding).includes(true) || playSpinner || initialLoad) return
@@ -149,7 +147,7 @@ function Projects() {
       
       if (topEl.current) {topEl.current.style.opacity = "0"}
     }
-  
+
   const handleRightClick = () => {
     if (Object.values(sliding).includes(true) || playSpinner || initialLoad) return
     
@@ -221,7 +219,7 @@ function Projects() {
     Object.values(loopTextIntervals.current).forEach(intervalId => {
       clearInterval(intervalId);
     })
-    // loopTextIntervals.current = {};
+    loopTextIntervals.current = {};
     removeText(projectText, 0)
     removeText(projectText2, 1)
   }

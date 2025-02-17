@@ -1,10 +1,7 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+
 
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Audiowide&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Exo+2:wght@400;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Space+Mono&display=swap');
+
 
 body {
   background: radial-gradient(circle at 50% 65%, #0b1316, #050505);
@@ -58,10 +55,10 @@ body {
   height: 2.5rem;
   border-radius: 50%;
   transform: scale(0.9);
-  opacity: 0.7;
 }
 
 .nextVideo, .previousVideo, .currentVideo {
+  border-radius: 20px;
   display: block;
   position: absolute;
   top: 0;
@@ -73,7 +70,7 @@ body {
 }
 
 .previousVideo {
-  display: none;
+  opacity: 0;
 }
 
 @keyframes slideLeft {
@@ -244,13 +241,13 @@ body {
     height: 2rem;
   }
 }
-/* .loader {
-  z-index: 2;
+.loader {
+  z-index: 5;
   width: 70px;
   padding: 8px;
   aspect-ratio: 1;
   border-radius: 50%;
-  background: rgb(0, 156, 204);
+  background: #25b09b;
   filter: drop-shadow(0px 0px 13px rgba(0, 156, 204, 0.8));
   --_m:
     conic-gradient(#0000 10%,#000),
@@ -261,10 +258,29 @@ body {
           mask-composite: subtract;
   animation: l3 1s infinite linear;
 }
-@keyframes l3 {to{transform: rotate(1turn)}} */
+@keyframes l3 {to{transform: rotate(1turn)}}
+
+.loader2 {
+  z-index: 4;
+  width: 70px;
+  padding: 8px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: #25b09b;
+  filter: drop-shadow(0px 0px 13px rgba(0, 156, 204, 0.8));
+  --_m:
+    conic-gradient(#0000 10%,#000),
+    linear-gradient(#000 0 0) content-box;
+  -webkit-mask: var(--_m);
+          mask: var(--_m);
+  -webkit-mask-composite: source-out;
+          mask-composite: subtract;
+  animation: l3 1s infinite linear;
+}
+@keyframes l3 {to{transform: rotate(1turn)}}
 
 /* HTML: <div class="loader"></div> */
-.loader {
+/* .loader {
   width: 70px;
   z-index: 5;
   aspect-ratio: 1.154;
@@ -326,4 +342,5 @@ body {
    0%      {transform: rotate(calc(var(--s,1)*120deg)) translate(0)}
    30%,70% {transform: rotate(calc(var(--s,1)*120deg)) translate(calc(var(--s,1)*-5px),10px)}
    100%    {transform: rotate(calc(var(--s,1)*120deg)) translate(0)}
-}
+} */
+

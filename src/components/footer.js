@@ -7,8 +7,8 @@ function Footer() {
 
 const icons = [
     { component: FaGithub, link: "https://github.com/imihhail" },
-    { component: BsLinkedin, link: "https://linkedin.com/in/your-profile" },
-    { component: FaFacebookSquare, link: "https://facebook.com/your-profile" },
+    { component: BsLinkedin, link: "https://linkedin.com/in/ivar-mihhailov" },
+    { component: FaFacebookSquare, link: "https://www.facebook.com/profile.php?id=100001865901824" },
     { component: SiGmail, link: "mailto:ivar.mihhailov@gmail.com" }
 ];
 

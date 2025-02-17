@@ -2,30 +2,23 @@ import React, { useState, Suspense } from 'react';
 import './models.css';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls, useGLTF, Environment, Html, useProgress } from '@react-three/drei';
-import { EffectComposer, Bloom, ToneMapping, HueSaturation } from '@react-three/postprocessing';
+import { EffectComposer, ToneMapping, HueSaturation } from '@react-three/postprocessing';
 import pagodaGLB from '../assets/SM_Pagoda.glb';
 import bell from '../assets/bell.jpg';
 import closerLook from '../assets/closer.jpg';
 import sunSet from '../assets/sunSet.jpg';
-import wireFrame from '../assets/wireFrame.png';
-import customHDRI from '../assets/garden.exr';
 import { RiDragMoveLine } from "react-icons/ri";
-import { SiUnrealengine } from "react-icons/si";
-import { BiLogoBlender } from "react-icons/bi";
 import { ImEnlarge } from "react-icons/im";
 
 function Loader() {
-  const { progress } = useProgress();
-  return (
-    <Html center>
-      <div className="loader">
+  const { progress } = useProgress()
 
-      </div>
-      <div className="loaderr">
-        {progress.toFixed(0)}% loaded
-      </div>
-    </Html>
-  );
+  return <Html center>
+          <div className='loadingScreen'>
+            <div className='loader'></div>
+            <p>{Math.round(progress)}% loaded</p>
+          </div>
+        </Html>
 }
 
 function Model() {
@@ -53,7 +46,7 @@ function Models() {
 
   const handleCloseModal = () => {
     setSelectedImage(null);
-  };
+  }
 
   return (
     <div className='modelsContainer'>
@@ -64,33 +57,24 @@ function Models() {
         onMouseLeave={handleMouseUpOrLeave}
       >
         {!isMouseDown && <RiDragMoveLine className="rotateIcon" />}
-        <Canvas shadows camera={{ position: [0, 0, 8], fov: 50 }} dpr={[1, 2]} gl={{ antialias: true }}>
-          <ambientLight intensity={0.4} />
-          <directionalLight position={[5, 5, 5]} intensity={3} castShadow />
-          <spotLight position={[2, 5, 3]} angle={0.3} intensity={2} castShadow />
-          
-          {/* Wrap the Model with Suspense and show Loader until it's ready */}
+        <Canvas shadows camera={{ position: [0, 0, 7], fov: 50 }} dpr={[1, 2]} gl={{ antialias: false }}>
           <Suspense fallback={<Loader />}>
+            <ambientLight intensity={0.4} />
+            <directionalLight position={[5, 5, 5]} intensity={2} castShadow />
+            <spotLight position={[2, 5, 3]} angle={0.3} intensity={2} castShadow />
             <Model />
-          </Suspense>
-          
-          <OrbitControls
-            enableDamping
-            autoRotate
-            autoRotateSpeed={0.5}
-            target={[0, 1, 0]}
-          />
-          <Environment files={customHDRI} background={false} />
-          <EffectComposer>
-            <HueSaturation saturation={0.15} />
-            <ToneMapping />
-            <Bloom
-              intensity={0.05}
-              luminanceThreshold={0.1}
-              luminanceSmoothing={0.025}
-              radius={0.6}
+            <OrbitControls
+              enableDamping
+              autoRotate
+              autoRotateSpeed={0.5}
+              target={[0, 1, 0]}
             />
-          </EffectComposer>
+            <Environment preset="forest" background={false} />
+            <EffectComposer>
+              <HueSaturation saturation={0.15} />
+              <ToneMapping />
+            </EffectComposer>
+          </Suspense>
         </Canvas>
       </div>
       

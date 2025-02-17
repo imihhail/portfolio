@@ -27,7 +27,7 @@ function Contact() {
   return (
     <div className="contactSection">
       <h1>Contact Me</h1>
-      <p>Feel free to reach out to me through any of the following platforms:</p>
+      <p>Feel free to reach out to me using any of the following contact methods:</p>
       <div className="contactIcons">
         {contacts.map((contact, index) => (
           <a
