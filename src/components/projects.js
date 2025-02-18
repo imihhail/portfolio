@@ -12,11 +12,11 @@ import { VscGithub } from "react-icons/vsc";
 
 function Projects({ modelLoaded }) {
   const videoList = [
-    { project: snetwork, info: ["Project: Social network", "Technology: GO, JavaScript, React, SQL", "https://github.com/imihhail/social-gamenetwork"] },
-    { project: bomberman, info:["Project: Bomberman-live", "Technology: GO, JavaScript, React, SQL", "https://github.com/imihhail/Bomberman-live"] },
-    { project: tetris, info: ["Project: Tetris-Survival", "Technology: GO, JavaScript", "https://github.com/imihhail/Tetris"] },
-    { project: messenger, info: ["Project: Forum-chat", "Technology: GO, JavaScript, SQL", "https://github.com/imihhail/Forum-Chat"] },
-    { project: api, info: ["Project: GO-API", "Technology: GO, HTML, CSS", "https://github.com/imihhail/GO-API"] }
+    { project: snetwork, info: ["Project: Social network", "Technologies: GO, JavaScript, React, SQL", "https://github.com/imihhail/social-gamenetwork"] },
+    { project: bomberman, info:["Project: Bomberman-live", "Technologies: GO, JavaScript, React, SQL", "https://github.com/imihhail/Bomberman-live"] },
+    { project: tetris, info: ["Project: Tetris-Survival", "Technologies: GO, JavaScript", "https://github.com/imihhail/Tetris"] },
+    { project: messenger, info: ["Project: Forum-chat", "Technologies: GO, JavaScript, SQL", "https://github.com/imihhail/Forum-Chat"] },
+    { project: api, info: ["Project: GO-API", "Technologies: GO, HTML, CSS", "https://github.com/imihhail/GO-API"] }
   ]
   const [leftClicked, setLeftClicked] = useState(false);
   const [rightClicked, setRightClicked] = useState(false);
@@ -47,6 +47,9 @@ function Projects({ modelLoaded }) {
 
   useEffect(() => {
     if (!initialLoad && modelLoaded) {
+      typeText(videoList[page - 1].info[0], 0)
+      typeText(videoList[page - 1].info[1], 1)
+    } else if (!initialLoad && window.innerWidth <= 600) {
       typeText(videoList[page - 1].info[0], 0)
       typeText(videoList[page - 1].info[1], 1)
     }

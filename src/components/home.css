@@ -35,6 +35,21 @@
   line-height: 1.5;
 }
 
+.cvButton {
+  display: inline-block;
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #0086c4;
+  color: #ffffff;
+  text-decoration: none;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.cvButton:hover {
+  background-color: #00a6ff;
+}
+
 .homeImage {
   flex: 1;
   display: flex;
@@ -53,11 +68,9 @@
 @keyframes fadeInZoom {
   0% {
     opacity: 0;
- 
   }
   100% {
     opacity: 0.8; 
-  
   }
 }
 
@@ -91,6 +104,15 @@
   .profilePhoto {
     width: 250px;
   }
+
+  .cvButton {
+    display: inline-block;
+    margin: 10px;
+    margin-top: 0px;
+    padding: 5px 10px;
+    border-radius: 3px;
+    font-size: 0.9rem;
+  }
 }
 
 @media screen and (max-width: 480px) {
@@ -110,6 +132,7 @@
     width: 200px;
   }
 }
+
 @media screen and (max-width: 768px) {
   .homeSection {
     flex-direction: column;
